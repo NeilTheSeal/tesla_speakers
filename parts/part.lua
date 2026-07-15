@@ -49,8 +49,10 @@ local wire_pass_through_height = param("Wire pass-through height", 30)
 local wire_wall_side = param("Wire wall side", -1)
 local box_edge_chamfer = param("Box edge chamfer", 3)
 local foot_diameter = param("Foot diameter", 1.5 * inch)
-local foot_height = param("Foot height", 1.0 * inch)
+local foot_height = param("Foot height", 0.75 * inch)
 local foot_corner_inset = param("Foot corner inset", 8)
+local foot_collar_height = param("Foot collar height", 6)
+local foot_collar_flare = param("Foot collar flare", 5)
 local isolation_pad_diameter = param("Isolation pad diameter", 1.0625 * inch)
 local isolation_pad_recess_depth = param("Isolation pad recess depth", 0.25 * inch)
 local foot_edge_chamfer = param("Foot edge chamfer", 1.5)
@@ -249,13 +251,19 @@ end
 local function isolation_foot(center_x, center_y)
 	local foot = chamfer_all(cylinder(foot_diameter, foot_height + 0.8), foot_edge_chamfer)
 	foot = translate(foot, center_x, center_y, -foot_height)
+	local collar = translate(
+		cone(foot_diameter, foot_diameter + 2 * foot_collar_flare, foot_collar_height + 0.2),
+		center_x,
+		center_y,
+		-foot_collar_height
+	)
 	local recess = translate(
 		cylinder(isolation_pad_diameter, isolation_pad_recess_depth + 0.2),
 		center_x,
 		center_y,
 		-foot_height - 0.1
 	)
-	return foot, recess
+	return union(foot, collar), recess
 end
 
 -- A shallow rounded panel frames the deeper NH monogram engraving.
