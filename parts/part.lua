@@ -18,6 +18,9 @@ local woofer_brace_window_height = param("Woofer brace window height", 90)
 local baffle_thickness = param("Raised baffle thickness", 12)
 local baffle_margin = param("Raised baffle margin", 6)
 local baffle_side_inset = param("Raised baffle side inset", 2)
+local trim_ring_height = param("Baffle trim ring height", 2)
+local trim_ring_width = param("Baffle trim ring width", 3)
+local trim_ring_overlap = param("Baffle trim ring overlap", 0.8)
 
 -- Check these against the supplied manufacturer CAD before printing.
 local woofer_cutout_diameter = param("Woofer cutout diameter", 194.1)
@@ -115,6 +118,24 @@ local function top_face_baffle(diameter, center_x, center_y)
 	return translate(cylinder(diameter, baffle_thickness + 0.8), center_x, center_y, cabinet_height)
 end
 
+-- Shallow cosmetic rings overlap the baffle edge, leaving all driver mounting
+-- surfaces and bolt locations unchanged.
+local function baffle_trim_ring(baffle_diameter, center_x, center_y)
+	local ring = translate(
+		cylinder(baffle_diameter + 2 * trim_ring_width, trim_ring_height),
+		center_x,
+		center_y,
+		cabinet_height + baffle_thickness
+	)
+	local inner_cut = translate(
+		cylinder(baffle_diameter - 2 * trim_ring_overlap, trim_ring_height + 0.2),
+		center_x,
+		center_y,
+		cabinet_height + baffle_thickness - 0.1
+	)
+	return ring, inner_cut
+end
+
 -- A 45 degree flare relieves the rear of a driver cutout without reducing the
 -- flat top-face mounting land or intersecting the nearby bolt holes.
 local function rear_cutout_flare(cutout_diameter, chamfer_depth, center_x, center_y)
@@ -176,8 +197,9 @@ local function monogram_emblem()
 	return translate(monogram, emblem_center_x, emblem_center_y, cutter_z)
 end
 
-local function add_driver_cuts(cuts, baffles, side, center_y, center_x_offset, frame_diameter, cutout_diameter, rear_chamfer, bolt_radius, bolt_hole_diameter, bolt_angles)
+local function add_driver_cuts(cuts, baffles, trim_rings, trim_ring_cuts, side, center_y, center_x_offset, frame_diameter, cutout_diameter, rear_chamfer, bolt_radius, bolt_hole_diameter, bolt_angles)
 	local baffle_radius = frame_diameter / 2 + baffle_margin
+	local baffle_diameter = frame_diameter + 2 * baffle_margin
 	local center_x = side * (half_width - baffle_radius - baffle_side_inset) + center_x_offset
 	local inside_depth = wall_thickness + 2
 	local outside_depth = 20
@@ -185,11 +207,14 @@ local function add_driver_cuts(cuts, baffles, side, center_y, center_x_offset, f
 	table.insert(
 		baffles,
 		top_face_baffle(
-			frame_diameter + 2 * baffle_margin,
+			baffle_diameter,
 			center_x,
 			center_y
 		)
 	)
+	local trim_ring, trim_ring_cut = baffle_trim_ring(baffle_diameter, center_x, center_y)
+	table.insert(trim_rings, trim_ring)
+	table.insert(trim_ring_cuts, trim_ring_cut)
 
 	table.insert(
 		cuts,
@@ -222,6 +247,8 @@ end
 
 local cuts = {}
 local baffles = {}
+local trim_rings = {}
+local trim_ring_cuts = {}
 local feet = {}
 local foot_recesses = {}
 local foot_radius = foot_diameter / 2
@@ -249,6 +276,8 @@ local midrange_bolt_angles = { -15, 15, 105, 135, 225, 255 }
 add_driver_cuts(
 	cuts,
 	baffles,
+	trim_rings,
+	trim_ring_cuts,
 	-1,
 	woofer_center_y,
 	woofer_x_offset,
@@ -262,6 +291,8 @@ add_driver_cuts(
 add_driver_cuts(
 	cuts,
 	baffles,
+	trim_rings,
+	trim_ring_cuts,
 	1,
 	midrange_center_y,
 	midrange_x_offset,
@@ -276,12 +307,16 @@ add_driver_cuts(
 table.insert(cuts, wire_pass_through(woofer_center_y))
 table.insert(cuts, wire_pass_through(midrange_center_y))
 table.insert(cuts, monogram_emblem())
+for _, trim_ring_cut in ipairs(trim_ring_cuts) do
+	table.insert(cuts, trim_ring_cut)
+end
 for _, recess in ipairs(foot_recesses) do
 	table.insert(cuts, recess)
 end
 
 cabinet = union(cabinet, table.unpack(feet))
 cabinet = union(cabinet, table.unpack(baffles))
+cabinet = union(cabinet, table.unpack(trim_rings))
 cabinet = difference(cabinet, union(table.unpack(cuts)))
 
 local wire_wall_face = wire_wall_side < 0 and "xmin" or "xmax"
