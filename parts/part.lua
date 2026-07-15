@@ -33,6 +33,11 @@ local wire_pass_through_diameter = param("Wire pass-through diameter", 20)
 local wire_pass_through_height = param("Wire pass-through height", 30)
 local wire_wall_side = param("Wire wall side", -1)
 local box_edge_chamfer = param("Box edge chamfer", 3)
+local foot_diameter = param("Foot diameter", 1.5 * inch)
+local foot_height = param("Foot height", 1.0 * inch)
+local foot_corner_inset = param("Foot corner inset", 8)
+local isolation_pad_diameter = param("Isolation pad diameter", 1.0625 * inch)
+local isolation_pad_recess_depth = param("Isolation pad recess depth", 0.25 * inch)
 
 local roof_radians = math.rad(roof_angle)
 local half_width = outside_width / 2
@@ -129,6 +134,19 @@ local function wire_pass_through(center_y)
 	)
 end
 
+-- Feet extend downward from the box bottom. Their open-bottom recesses hold
+-- 0.25 in Sorbothane discs flush with the floor-contact surface.
+local function isolation_foot(center_x, center_y)
+	local foot = translate(cylinder(foot_diameter, foot_height + 0.8), center_x, center_y, -foot_height)
+	local recess = translate(
+		cylinder(isolation_pad_diameter, isolation_pad_recess_depth + 0.2),
+		center_x,
+		center_y,
+		-foot_height - 0.1
+	)
+	return foot, recess
+end
+
 local function add_driver_cuts(cuts, baffles, side, center_y, frame_diameter, cutout_diameter, bolt_radius, bolt_hole_diameter, bolt_angles)
 	local baffle_radius = frame_diameter / 2 + baffle_margin
 	local baffle_outer_x = baffle_radius * math.cos(roof_radians)
@@ -186,6 +204,23 @@ end
 
 local cuts = {}
 local baffles = {}
+local feet = {}
+local foot_recesses = {}
+local foot_radius = foot_diameter / 2
+local foot_x = half_width - foot_radius - foot_corner_inset
+local foot_y = foot_radius + foot_corner_inset
+local foot_positions = {
+	{ -foot_x, foot_y },
+	{ foot_x, foot_y },
+	{ -foot_x, cabinet_length - foot_y },
+	{ foot_x, cabinet_length - foot_y },
+}
+for _, position in ipairs(foot_positions) do
+	local foot, recess = isolation_foot(position[1], position[2])
+	table.insert(feet, foot)
+	table.insert(foot_recesses, recess)
+end
+
 local woofer_bolt_angles = {}
 for index = 0, 6 do
 	table.insert(woofer_bolt_angles, 360 * index / 7)
@@ -218,7 +253,11 @@ add_driver_cuts(
 
 table.insert(cuts, wire_pass_through(woofer_center_y))
 table.insert(cuts, wire_pass_through(midrange_center_y))
+for _, recess in ipairs(foot_recesses) do
+	table.insert(cuts, recess)
+end
 
+cabinet = union(cabinet, table.unpack(feet))
 cabinet = union(cabinet, table.unpack(baffles))
 cabinet = difference(cabinet, union(table.unpack(cuts)))
 emit(cabinet)
