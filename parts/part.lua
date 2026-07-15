@@ -151,9 +151,9 @@ local function roof_baffle(diameter, center_x, center_y, center_z, side)
 	baffle = rotate_y(baffle, angle)
 	return translate(
 		baffle,
-		center_x - math.sin(angle_radians) * 0.8,
+		center_x,
 		center_y,
-		center_z - math.cos(angle_radians) * 0.8
+		center_z
 	)
 end
 
