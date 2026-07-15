@@ -40,6 +40,9 @@ local isolation_pad_diameter = param("Isolation pad diameter", 1.0625 * inch)
 local isolation_pad_recess_depth = param("Isolation pad recess depth", 0.25 * inch)
 local foot_edge_chamfer = param("Foot edge chamfer", 1.5)
 local wire_hole_chamfer = param("Wire hole chamfer", 1)
+local emblem_engraving_depth = param("Emblem engraving depth", 0.125 * inch)
+local emblem_center_x = param("Emblem center X", -70)
+local emblem_center_y = param("Emblem center Y", cabinet_length - 75)
 
 local roof_radians = math.rad(roof_angle)
 local half_width = outside_width / 2
@@ -150,6 +153,29 @@ local function isolation_foot(center_x, center_y)
 	return foot, recess
 end
 
+-- A small six-ray acoustic beacon engraved into the unused top-left area.
+local function acoustic_emblem()
+	local cutter_height = emblem_engraving_depth + 0.2
+	local cutter_z = total_height - emblem_engraving_depth
+	local shapes = {
+		translate(hex_prism(14, cutter_height), emblem_center_x, emblem_center_y, cutter_z),
+	}
+	for index = 0, 5 do
+		local angle = index * 60
+		local angle_radians = math.rad(angle)
+		local ray = center_xy(box(18, 4, cutter_height))
+		ray = rotate_z(ray, angle)
+		ray = translate(
+			ray,
+			emblem_center_x + 23 * math.cos(angle_radians),
+			emblem_center_y + 23 * math.sin(angle_radians),
+			cutter_z
+		)
+		table.insert(shapes, ray)
+	end
+	return union(table.unpack(shapes))
+end
+
 local function add_driver_cuts(cuts, baffles, side, center_y, frame_diameter, cutout_diameter, bolt_radius, bolt_hole_diameter, bolt_angles)
 	local baffle_radius = frame_diameter / 2 + baffle_margin
 	local baffle_outer_x = baffle_radius * math.cos(roof_radians)
@@ -256,6 +282,7 @@ add_driver_cuts(
 
 table.insert(cuts, wire_pass_through(woofer_center_y))
 table.insert(cuts, wire_pass_through(midrange_center_y))
+table.insert(cuts, acoustic_emblem())
 for _, recess in ipairs(foot_recesses) do
 	table.insert(cuts, recess)
 end
