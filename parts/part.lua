@@ -30,6 +30,9 @@ local midrange_bolt_circle = param("Midrange bolt circle", 106)
 local midrange_mount_count = param("Midrange mount count", 6)
 local midrange_center_y = param("Midrange center Y", 340)
 local mounting_hole_diameter = param("Mounting hole diameter", 4.4)
+local wire_pass_through_diameter = param("Wire pass-through diameter", 10)
+local wire_pass_through_height = param("Wire pass-through height", 30)
+local wire_wall_side = param("Wire wall side", -1)
 
 local roof_radians = math.rad(roof_angle)
 local half_width = outside_width / 2
@@ -112,6 +115,20 @@ local function roof_baffle(diameter, center_x, center_y, center_z, side)
 	)
 end
 
+-- One wire pass-through per sealed chamber, located in the lower portion of
+-- the long side wall. Install a grommet or seal the wires after final wiring.
+local function wire_pass_through(center_y)
+	local cutter_length = wall_thickness + 4
+	local cutter = cylinder(wire_pass_through_diameter, cutter_length)
+	cutter = rotate_y(cutter, wire_wall_side * 90)
+	return translate(
+		cutter,
+		wire_wall_side * (half_width - wall_thickness - 2),
+		center_y,
+		wire_pass_through_height
+	)
+end
+
 local function add_driver_cuts(cuts, baffles, side, center_y, frame_diameter, cutout_diameter, bolt_circle, mount_count)
 	local baffle_radius = frame_diameter / 2 + baffle_margin
 	local baffle_outer_x = baffle_radius * math.cos(roof_radians)
@@ -190,6 +207,9 @@ add_driver_cuts(
 	midrange_bolt_circle,
 	midrange_mount_count
 )
+
+table.insert(cuts, wire_pass_through(woofer_center_y))
+table.insert(cuts, wire_pass_through(midrange_center_y))
 
 cabinet = union(cabinet, table.unpack(baffles))
 cabinet = difference(cabinet, union(table.unpack(cuts)))
