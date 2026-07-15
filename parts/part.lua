@@ -38,6 +38,8 @@ local foot_height = param("Foot height", 1.0 * inch)
 local foot_corner_inset = param("Foot corner inset", 8)
 local isolation_pad_diameter = param("Isolation pad diameter", 1.0625 * inch)
 local isolation_pad_recess_depth = param("Isolation pad recess depth", 0.25 * inch)
+local foot_edge_chamfer = param("Foot edge chamfer", 1.5)
+local wire_hole_chamfer = param("Wire hole chamfer", 1)
 
 local roof_radians = math.rad(roof_angle)
 local half_width = outside_width / 2
@@ -137,7 +139,8 @@ end
 -- Feet extend downward from the box bottom. Their open-bottom recesses hold
 -- 0.25 in Sorbothane discs flush with the floor-contact surface.
 local function isolation_foot(center_x, center_y)
-	local foot = translate(cylinder(foot_diameter, foot_height + 0.8), center_x, center_y, -foot_height)
+	local foot = chamfer_all(cylinder(foot_diameter, foot_height + 0.8), foot_edge_chamfer)
+	foot = translate(foot, center_x, center_y, -foot_height)
 	local recess = translate(
 		cylinder(isolation_pad_diameter, isolation_pad_recess_depth + 0.2),
 		center_x,
@@ -260,4 +263,8 @@ end
 cabinet = union(cabinet, table.unpack(feet))
 cabinet = union(cabinet, table.unpack(baffles))
 cabinet = difference(cabinet, union(table.unpack(cuts)))
+
+local wire_wall_face = wire_wall_side < 0 and "xmin" or "xmax"
+local wire_hole_edges = edges(cabinet):on_box_side(wire_wall_face):geom("circle"):collect()
+cabinet = chamfer(cabinet, wire_hole_edges, wire_hole_chamfer)
 emit(cabinet)
