@@ -55,6 +55,10 @@ local wire_hole_chamfer = param("Wire hole chamfer", 1)
 local emblem_engraving_depth = param("Emblem engraving depth", 0.125 * inch)
 local emblem_center_x = param("Emblem center X", -70)
 local emblem_center_y = param("Emblem center Y", cabinet_length - 75)
+local badge_panel_depth = param("Badge panel depth", 1)
+local badge_panel_width = param("Badge panel width", 88)
+local badge_panel_height = param("Badge panel height", 100)
+local badge_panel_corner_radius = param("Badge panel corner radius", 10)
 
 local half_width = outside_width / 2
 local inner_half_width = half_width - wall_thickness
@@ -229,6 +233,42 @@ local function isolation_foot(center_x, center_y)
 	return foot, recess
 end
 
+-- A shallow rounded panel frames the deeper NH monogram engraving.
+local function badge_panel()
+	local cutter_height = badge_panel_depth + 0.2
+	local cutter_z = cabinet_height - badge_panel_depth
+	local radius = badge_panel_corner_radius
+	local half_panel_width = badge_panel_width / 2
+	local half_panel_height = badge_panel_height / 2
+	local center_bar = translate(
+		box(badge_panel_width - 2 * radius, badge_panel_height, cutter_height),
+		emblem_center_x - half_panel_width + radius,
+		emblem_center_y - half_panel_height,
+		cutter_z
+	)
+	local side_bar = translate(
+		box(badge_panel_width, badge_panel_height - 2 * radius, cutter_height),
+		emblem_center_x - half_panel_width,
+		emblem_center_y - half_panel_height + radius,
+		cutter_z
+	)
+	local corners = {}
+	for _, x_sign in ipairs({ -1, 1 }) do
+		for _, y_sign in ipairs({ -1, 1 }) do
+			table.insert(
+				corners,
+				translate(
+					cylinder(2 * radius, cutter_height),
+					emblem_center_x + x_sign * (half_panel_width - radius),
+					emblem_center_y + y_sign * (half_panel_height - radius),
+					cutter_z
+				)
+			)
+		end
+	end
+	return union(center_bar, side_bar, table.unpack(corners))
+end
+
 -- Art-deco NH monogram made from tapered polygonal letter strokes.
 local function monogram_emblem()
 	local cutter_height = emblem_engraving_depth + 0.2
@@ -362,6 +402,7 @@ add_driver_cuts(
 
 table.insert(cuts, wire_pass_through(woofer_center_y))
 table.insert(cuts, wire_pass_through(midrange_center_y))
+table.insert(cuts, badge_panel())
 table.insert(cuts, monogram_emblem())
 for _, trim_ring_cut in ipairs(trim_ring_cuts) do
 	table.insert(cuts, trim_ring_cut)
