@@ -8,7 +8,7 @@ local inch = 25.4
 local outside_width = param("Outside width", 9.5 * inch)
 local cabinet_length = param("Cabinet length", 410)
 local wall_thickness = param("Wall thickness", 8)
-local vertical_wall_height = param("Vertical wall height", 210)
+local vertical_wall_height = param("Vertical wall height", 150)
 -- A 45 degree roof slope gives the two driver axes a 90 degree included angle.
 local roof_angle = param("Roof angle", 0)
 local divider_y = param("Woofer chamber length", 270)
@@ -18,21 +18,21 @@ local baffle_margin = param("Raised baffle margin", 6)
 local baffle_side_inset = param("Raised baffle side inset", 2)
 
 -- Check these against the supplied manufacturer CAD before printing.
-local woofer_cutout_diameter = param("Woofer cutout diameter", 185)
-local woofer_frame_diameter = param("Woofer frame diameter", 225)
-local woofer_bolt_circle = param("Woofer bolt circle", 210)
-local woofer_mount_count = param("Woofer mount count", 8)
+local woofer_cutout_diameter = param("Woofer cutout diameter", 194.1)
+local woofer_frame_diameter = param("Woofer frame diameter", 222)
+local woofer_bolt_radius = param("Woofer bolt radius", 105)
+local woofer_mount_hole_diameter = param("Woofer mount hole diameter", 5.2)
 local woofer_center_y = param("Woofer center Y", 140)
 
-local midrange_cutout_diameter = param("Midrange cutout diameter", 98)
+local midrange_cutout_diameter = param("Midrange cutout diameter", 101)
 local midrange_frame_diameter = param("Midrange frame diameter", 120)
-local midrange_bolt_circle = param("Midrange bolt circle", 106)
-local midrange_mount_count = param("Midrange mount count", 6)
+local midrange_bolt_radius = param("Midrange bolt radius", 55.8)
+local midrange_mount_hole_diameter = param("Midrange mount hole diameter", 4.5)
 local midrange_center_y = param("Midrange center Y", 340)
-local mounting_hole_diameter = param("Mounting hole diameter", 4.4)
-local wire_pass_through_diameter = param("Wire pass-through diameter", 10)
+local wire_pass_through_diameter = param("Wire pass-through diameter", 20)
 local wire_pass_through_height = param("Wire pass-through height", 30)
 local wire_wall_side = param("Wire wall side", -1)
+local box_edge_chamfer = param("Box edge chamfer", 3)
 
 local roof_radians = math.rad(roof_angle)
 local half_width = outside_width / 2
@@ -67,7 +67,7 @@ local inner_profile = poly_xy({
 	{ -inner_half_width, inner_eave_height },
 })
 
-local outer_shell = section(outer_profile, cabinet_length)
+local outer_shell = chamfer_all(section(outer_profile, cabinet_length), box_edge_chamfer)
 local inner_cavity = translate(
 	section(inner_profile, cabinet_length - 2 * wall_thickness),
 	0,
@@ -129,7 +129,7 @@ local function wire_pass_through(center_y)
 	)
 end
 
-local function add_driver_cuts(cuts, baffles, side, center_y, frame_diameter, cutout_diameter, bolt_circle, mount_count)
+local function add_driver_cuts(cuts, baffles, side, center_y, frame_diameter, cutout_diameter, bolt_radius, bolt_hole_diameter, bolt_angles)
 	local baffle_radius = frame_diameter / 2 + baffle_margin
 	local baffle_outer_x = baffle_radius * math.cos(roof_radians)
 		+ baffle_thickness * math.sin(roof_radians)
@@ -163,9 +163,8 @@ local function add_driver_cuts(cuts, baffles, side, center_y, frame_diameter, cu
 	)
 
 	local angle_radians = side * roof_radians
-	local bolt_radius = bolt_circle / 2
-	for index = 0, mount_count - 1 do
-		local theta = 2 * math.pi * index / mount_count
+	for _, angle_degrees in ipairs(bolt_angles) do
+		local theta = math.rad(angle_degrees)
 		local roof_axis_offset = bolt_radius * math.cos(theta)
 		local y_offset = bolt_radius * math.sin(theta)
 		local hole_x = center_x + math.cos(angle_radians) * roof_axis_offset
@@ -173,7 +172,7 @@ local function add_driver_cuts(cuts, baffles, side, center_y, frame_diameter, cu
 		table.insert(
 			cuts,
 			roof_cutter(
-				mounting_hole_diameter,
+				bolt_hole_diameter,
 				inside_depth,
 				outside_depth,
 				hole_x,
@@ -187,6 +186,13 @@ end
 
 local cuts = {}
 local baffles = {}
+local woofer_bolt_angles = {}
+for index = 0, 6 do
+	table.insert(woofer_bolt_angles, 360 * index / 7)
+end
+
+local midrange_bolt_angles = { -15, 15, 105, 135, 225, 255 }
+
 add_driver_cuts(
 	cuts,
 	baffles,
@@ -194,8 +200,9 @@ add_driver_cuts(
 	woofer_center_y,
 	woofer_frame_diameter,
 	woofer_cutout_diameter,
-	woofer_bolt_circle,
-	woofer_mount_count
+	woofer_bolt_radius,
+	woofer_mount_hole_diameter,
+	woofer_bolt_angles
 )
 add_driver_cuts(
 	cuts,
@@ -204,8 +211,9 @@ add_driver_cuts(
 	midrange_center_y,
 	midrange_frame_diameter,
 	midrange_cutout_diameter,
-	midrange_bolt_circle,
-	midrange_mount_count
+	midrange_bolt_radius,
+	midrange_mount_hole_diameter,
+	midrange_bolt_angles
 )
 
 table.insert(cuts, wire_pass_through(woofer_center_y))
