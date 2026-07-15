@@ -21,6 +21,9 @@ local baffle_side_inset = param("Raised baffle side inset", 2)
 local trim_ring_height = param("Baffle trim ring height", 2)
 local trim_ring_width = param("Baffle trim ring width", 3)
 local trim_ring_overlap = param("Baffle trim ring overlap", 0.8)
+local side_rib_depth = param("Side rib depth", 2.5)
+local side_rib_width = param("Side rib width", 8)
+local side_rib_end_clearance = param("Side rib end clearance", 14)
 
 -- Check these against the supplied manufacturer CAD before printing.
 local woofer_cutout_diameter = param("Woofer cutout diameter", 194.1)
@@ -161,6 +164,57 @@ local function wire_pass_through(center_y)
 	)
 end
 
+-- Three low-relief rails on each long wall add visual structure and provide a
+-- small amount of additional panel stiffness without crowding the wire exits.
+local function side_ribs()
+	local overlap = 0.8
+	local rib_height = cabinet_height - 2 * side_rib_end_clearance
+	local ribs = {}
+	for _, y_fraction in ipairs({ 0.17, 0.50, 0.88 }) do
+		local center_y = cabinet_length * y_fraction
+		local right_rib = translate(
+			box(side_rib_depth + overlap, side_rib_width, rib_height),
+			half_width - overlap,
+			center_y - side_rib_width / 2,
+			side_rib_end_clearance
+		)
+		local left_rib = translate(
+			box(side_rib_depth + overlap, side_rib_width, rib_height),
+			-half_width - side_rib_depth,
+			center_y - side_rib_width / 2,
+			side_rib_end_clearance
+		)
+		table.insert(ribs, left_rib)
+		table.insert(ribs, right_rib)
+	end
+	return ribs
+end
+
+-- Matching horizontal rails wrap the relief treatment around both end panels.
+local function end_panel_ribs()
+	local overlap = 0.8
+	local rib_length = outside_width - 2 * side_rib_end_clearance
+	local ribs = {}
+	for _, z_fraction in ipairs({ 0.17, 0.50, 0.83 }) do
+		local center_z = cabinet_height * z_fraction
+		local front_rib = translate(
+			box(rib_length, side_rib_depth + overlap, side_rib_width),
+			-rib_length / 2,
+			-side_rib_depth,
+			center_z - side_rib_width / 2
+		)
+		local back_rib = translate(
+			box(rib_length, side_rib_depth + overlap, side_rib_width),
+			-rib_length / 2,
+			cabinet_length - overlap,
+			center_z - side_rib_width / 2
+		)
+		table.insert(ribs, front_rib)
+		table.insert(ribs, back_rib)
+	end
+	return ribs
+end
+
 -- Feet extend downward from the box bottom. Their open-bottom recesses hold
 -- 0.25 in Sorbothane discs flush with the floor-contact surface.
 local function isolation_foot(center_x, center_y)
@@ -249,6 +303,8 @@ local cuts = {}
 local baffles = {}
 local trim_rings = {}
 local trim_ring_cuts = {}
+local ribs = side_ribs()
+local end_ribs = end_panel_ribs()
 local feet = {}
 local foot_recesses = {}
 local foot_radius = foot_diameter / 2
@@ -322,4 +378,6 @@ cabinet = difference(cabinet, union(table.unpack(cuts)))
 local wire_wall_face = wire_wall_side < 0 and "xmin" or "xmax"
 local wire_hole_edges = edges(cabinet):on_box_side(wire_wall_face):geom("circle"):collect()
 cabinet = chamfer(cabinet, wire_hole_edges, wire_hole_chamfer)
+cabinet = union(cabinet, table.unpack(ribs))
+cabinet = union(cabinet, table.unpack(end_ribs))
 emit(cabinet)
