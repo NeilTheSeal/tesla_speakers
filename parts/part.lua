@@ -29,7 +29,7 @@ local midrange_frame_diameter = param("Midrange frame diameter", 120)
 local midrange_bolt_radius = param("Midrange bolt radius", 55.8)
 local midrange_mount_hole_diameter = param("Midrange mount hole diameter", 4.5)
 local midrange_center_y = param("Midrange center Y", 340)
-local wire_pass_through_diameter = param("Wire pass-through diameter", 20)
+local wire_pass_through_diameter = param("Wire pass-through diameter", 12.5)
 local wire_pass_through_height = param("Wire pass-through height", 30)
 local wire_wall_side = param("Wire wall side", -1)
 local box_edge_chamfer = param("Box edge chamfer", 3)
@@ -153,27 +153,26 @@ local function isolation_foot(center_x, center_y)
 	return foot, recess
 end
 
--- A small six-ray acoustic beacon engraved into the unused top-left area.
-local function acoustic_emblem()
+-- Art-deco NH monogram made from tapered polygonal letter strokes.
+local function monogram_emblem()
 	local cutter_height = emblem_engraving_depth + 0.2
 	local cutter_z = total_height - emblem_engraving_depth
-	local shapes = {
-		translate(hex_prism(14, cutter_height), emblem_center_x, emblem_center_y, cutter_z),
-	}
-	for index = 0, 5 do
-		local angle = index * 60
-		local angle_radians = math.rad(angle)
-		local ray = center_xy(box(18, 4, cutter_height))
-		ray = rotate_z(ray, angle)
-		ray = translate(
-			ray,
-			emblem_center_x + 23 * math.cos(angle_radians),
-			emblem_center_y + 23 * math.sin(angle_radians),
-			cutter_z
-		)
-		table.insert(shapes, ray)
+	local function stroke(points)
+		return extrude(poly_xy(points), cutter_height)
 	end
-	return union(table.unpack(shapes))
+
+	local monogram = union(
+		-- N
+		stroke({ { -40, -32 }, { -32, -32 }, { -24, 32 }, { -32, 32 } }),
+		stroke({ { -12, -32 }, { -4, -32 }, { 2, 32 }, { -6, 32 } }),
+		stroke({ { -30, 32 }, { -22, 32 }, { -4, -32 }, { -12, -32 } }),
+		-- H
+		stroke({ { 7, -32 }, { 14, -32 }, { 17, 32 }, { 10, 32 } }),
+		stroke({ { 32, -32 }, { 40, -32 }, { 40, 32 }, { 32, 32 } }),
+		stroke({ { 12, -4 }, { 36, -4 }, { 36, 4 }, { 12, 4 } })
+	)
+	monogram = rotate_z(monogram, -90)
+	return translate(monogram, emblem_center_x, emblem_center_y, cutter_z)
 end
 
 local function add_driver_cuts(cuts, baffles, side, center_y, frame_diameter, cutout_diameter, bolt_radius, bolt_hole_diameter, bolt_angles)
@@ -282,7 +281,7 @@ add_driver_cuts(
 
 table.insert(cuts, wire_pass_through(woofer_center_y))
 table.insert(cuts, wire_pass_through(midrange_center_y))
-table.insert(cuts, acoustic_emblem())
+table.insert(cuts, monogram_emblem())
 for _, recess in ipairs(foot_recesses) do
 	table.insert(cuts, recess)
 end
