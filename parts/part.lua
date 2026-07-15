@@ -24,6 +24,9 @@ local trim_ring_overlap = param("Baffle trim ring overlap", 0.8)
 local side_rib_depth = param("Side rib depth", 2.5)
 local side_rib_width = param("Side rib width", 8)
 local side_rib_end_clearance = param("Side rib end clearance", 14)
+local corner_bumper_diameter = param("Corner bumper diameter", 12)
+local corner_bumper_projection = param("Corner bumper projection", 1.5)
+local corner_bumper_chamfer = param("Corner bumper chamfer", 1.5)
 
 -- Check these against the supplied manufacturer CAD before printing.
 local woofer_cutout_diameter = param("Woofer cutout diameter", 194.1)
@@ -219,6 +222,28 @@ local function end_panel_ribs()
 	return ribs
 end
 
+-- Rounded rails protect the four vertical corners and visually tie the
+-- low-relief panel ribs together.
+local function corner_bumpers()
+	local radius = corner_bumper_diameter / 2
+	local inset = radius - corner_bumper_projection
+	local rail_height = cabinet_height - 2 * box_edge_chamfer
+	local rails = {}
+	for _, x_sign in ipairs({ -1, 1 }) do
+		for _, y_center in ipairs({ inset, cabinet_length - inset }) do
+			local rail = chamfer_all(cylinder(corner_bumper_diameter, rail_height), corner_bumper_chamfer)
+			rail = translate(
+				rail,
+				x_sign * (half_width - inset),
+				y_center,
+				box_edge_chamfer
+			)
+			table.insert(rails, rail)
+		end
+	end
+	return rails
+end
+
 -- Feet extend downward from the box bottom. Their open-bottom recesses hold
 -- 0.25 in Sorbothane discs flush with the floor-contact surface.
 local function isolation_foot(center_x, center_y)
@@ -345,6 +370,7 @@ local trim_rings = {}
 local trim_ring_cuts = {}
 local ribs = side_ribs()
 local end_ribs = end_panel_ribs()
+local bumpers = corner_bumpers()
 local feet = {}
 local foot_recesses = {}
 local foot_radius = foot_diameter / 2
@@ -421,4 +447,5 @@ local wire_hole_edges = edges(cabinet):on_box_side(wire_wall_face):geom("circle"
 cabinet = chamfer(cabinet, wire_hole_edges, wire_hole_chamfer)
 cabinet = union(cabinet, table.unpack(ribs))
 cabinet = union(cabinet, table.unpack(end_ribs))
+cabinet = union(cabinet, table.unpack(bumpers))
 emit(cabinet)
