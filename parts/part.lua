@@ -8,11 +8,15 @@ local inch = 25.4
 local outside_width = param("Outside width", 9.5 * inch)
 local cabinet_length = param("Cabinet length", 410)
 local wall_thickness = param("Wall thickness", 8)
-local vertical_wall_height = param("Vertical wall height", 150)
+local vertical_wall_height = param("Vertical wall height", 220)
 -- A 45 degree roof slope gives the two driver axes a 90 degree included angle.
 local roof_angle = param("Roof angle", 0)
 local divider_y = param("Woofer chamber length", 270)
 local divider_thickness = param("Divider thickness", 8)
+local woofer_brace_y = param("Woofer window brace Y", 245)
+local woofer_brace_thickness = param("Woofer window brace thickness", 8)
+local woofer_brace_window_width = param("Woofer brace window width", 160)
+local woofer_brace_window_height = param("Woofer brace window height", 90)
 local baffle_thickness = param("Raised baffle thickness", 12)
 local baffle_margin = param("Raised baffle margin", 6)
 local baffle_side_inset = param("Raised baffle side inset", 2)
@@ -90,6 +94,34 @@ local cabinet = difference(outer_shell, inner_cavity)
 -- woofer back-wave pressure from modulating the midrange cone.
 local divider = translate(section(outer_profile, divider_thickness), 0, divider_y, 0)
 cabinet = union(cabinet, divider)
+
+-- A full-height brace couples the large long panels. Its pill-shaped window
+-- keeps the woofer chamber acoustically continuous without sharp airflow edges.
+local function woofer_window_brace()
+	local overlap = 0.8
+	local brace_profile = poly_xy({
+		{ -inner_half_width - overlap, wall_thickness - overlap },
+		{ inner_half_width + overlap, wall_thickness - overlap },
+		{ inner_half_width + overlap, total_height - wall_thickness + overlap },
+		{ -inner_half_width - overlap, total_height - wall_thickness + overlap },
+	})
+	local brace = translate(section(brace_profile, woofer_brace_thickness), 0, woofer_brace_y, 0)
+	local opening_depth = woofer_brace_thickness + 2
+	local window_height = total_height / 2
+	local cap_offset = (woofer_brace_window_width - woofer_brace_window_height) / 2
+	local center_window = translate(
+		box(woofer_brace_window_width - woofer_brace_window_height, opening_depth, woofer_brace_window_height),
+		-cap_offset,
+		woofer_brace_y,
+		window_height - woofer_brace_window_height / 2
+	)
+	local left_cap = rotate_x(cylinder(woofer_brace_window_height, opening_depth), 90)
+	left_cap = translate(left_cap, -cap_offset, woofer_brace_y + opening_depth, window_height)
+	local right_cap = translate(left_cap, 2 * cap_offset, 0, 0)
+	return difference(brace, union(center_window, left_cap, right_cap))
+end
+
+cabinet = union(cabinet, woofer_window_brace())
 
 local function roof_height(x)
 	return total_height - math.tan(roof_radians) * math.abs(x)
