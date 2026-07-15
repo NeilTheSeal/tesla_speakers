@@ -10,7 +10,7 @@ local cabinet_length = param("Cabinet length", 410)
 local wall_thickness = param("Wall thickness", 8)
 local vertical_wall_height = param("Vertical wall height", 210)
 -- A 45 degree roof slope gives the two driver axes a 90 degree included angle.
-local roof_angle = param("Roof angle", 45)
+local roof_angle = param("Roof angle", 0)
 local divider_y = param("Woofer chamber length", 270)
 local divider_thickness = param("Divider thickness", 8)
 local baffle_thickness = param("Raised baffle thickness", 12)
@@ -38,7 +38,7 @@ local total_height = vertical_wall_height + roof_rise
 
 -- Build an XZ profile and extrude it along +Y.
 local function section(profile, length)
-	return rotate_x(extrude(profile, length), -90)
+	return translate(rotate_x(extrude(profile, length), 90), 0, length, 0)
 end
 
 local outer_profile = poly_xy({
