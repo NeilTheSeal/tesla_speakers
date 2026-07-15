@@ -26,6 +26,7 @@ local woofer_bolt_radius = param("Woofer bolt radius", 105)
 local woofer_mount_hole_diameter = param("Woofer mount hole diameter", 5.2)
 local woofer_center_y = param("Woofer center Y", 140)
 local woofer_x_offset = param("Woofer X offset", 2)
+local woofer_rear_chamfer = param("Woofer rear cutout chamfer", 3)
 
 local midrange_cutout_diameter = param("Midrange cutout diameter", 101)
 local midrange_frame_diameter = param("Midrange frame diameter", 120)
@@ -33,6 +34,7 @@ local midrange_bolt_radius = param("Midrange bolt radius", 55.8)
 local midrange_mount_hole_diameter = param("Midrange mount hole diameter", 4.5)
 local midrange_center_y = param("Midrange center Y", 340)
 local midrange_x_offset = param("Midrange X offset", -2)
+local midrange_rear_chamfer = param("Midrange rear cutout chamfer", 2)
 local wire_pass_through_diameter = param("Wire pass-through diameter", 12.5)
 local wire_pass_through_height = param("Wire pass-through height", 30)
 local wire_wall_side = param("Wire wall side", -1)
@@ -113,6 +115,17 @@ local function top_face_baffle(diameter, center_x, center_y)
 	return translate(cylinder(diameter, baffle_thickness + 0.8), center_x, center_y, cabinet_height)
 end
 
+-- A 45 degree flare relieves the rear of a driver cutout without reducing the
+-- flat top-face mounting land or intersecting the nearby bolt holes.
+local function rear_cutout_flare(cutout_diameter, chamfer_depth, center_x, center_y)
+	return translate(
+		cone(cutout_diameter + 2 * chamfer_depth, cutout_diameter, chamfer_depth),
+		center_x,
+		center_y,
+		cabinet_height - wall_thickness
+	)
+end
+
 -- One wire pass-through per sealed chamber, located in the lower portion of
 -- the long side wall. Install a grommet or seal the wires after final wiring.
 local function wire_pass_through(center_y)
@@ -163,7 +176,7 @@ local function monogram_emblem()
 	return translate(monogram, emblem_center_x, emblem_center_y, cutter_z)
 end
 
-local function add_driver_cuts(cuts, baffles, side, center_y, center_x_offset, frame_diameter, cutout_diameter, bolt_radius, bolt_hole_diameter, bolt_angles)
+local function add_driver_cuts(cuts, baffles, side, center_y, center_x_offset, frame_diameter, cutout_diameter, rear_chamfer, bolt_radius, bolt_hole_diameter, bolt_angles)
 	local baffle_radius = frame_diameter / 2 + baffle_margin
 	local center_x = side * (half_width - baffle_radius - baffle_side_inset) + center_x_offset
 	local inside_depth = wall_thickness + 2
@@ -188,6 +201,7 @@ local function add_driver_cuts(cuts, baffles, side, center_y, center_x_offset, f
 			center_y
 		)
 	)
+	table.insert(cuts, rear_cutout_flare(cutout_diameter, rear_chamfer, center_x, center_y))
 
 	for _, angle_degrees in ipairs(bolt_angles) do
 		local theta = math.rad(angle_degrees)
@@ -240,6 +254,7 @@ add_driver_cuts(
 	woofer_x_offset,
 	woofer_frame_diameter,
 	woofer_cutout_diameter,
+	woofer_rear_chamfer,
 	woofer_bolt_radius,
 	woofer_mount_hole_diameter,
 	woofer_bolt_angles
@@ -252,6 +267,7 @@ add_driver_cuts(
 	midrange_x_offset,
 	midrange_frame_diameter,
 	midrange_cutout_diameter,
+	midrange_rear_chamfer,
 	midrange_bolt_radius,
 	midrange_mount_hole_diameter,
 	midrange_bolt_angles
