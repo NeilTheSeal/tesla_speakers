@@ -8,9 +8,7 @@ local inch = 25.4
 local outside_width = param("Outside width", 9.5 * inch)
 local cabinet_length = param("Cabinet length", 410)
 local wall_thickness = param("Wall thickness", 8)
-local vertical_wall_height = param("Vertical wall height", 220)
--- A 45 degree roof slope gives the two driver axes a 90 degree included angle.
-local roof_angle = param("Roof angle", 0)
+local cabinet_height = param("Cabinet height", 220)
 local divider_y = param("Woofer chamber length", 270)
 local divider_thickness = param("Divider thickness", 8)
 local woofer_brace_y = param("Woofer window brace Y", 245)
@@ -27,12 +25,14 @@ local woofer_frame_diameter = param("Woofer frame diameter", 222)
 local woofer_bolt_radius = param("Woofer bolt radius", 105)
 local woofer_mount_hole_diameter = param("Woofer mount hole diameter", 5.2)
 local woofer_center_y = param("Woofer center Y", 140)
+local woofer_x_offset = param("Woofer X offset", 2)
 
 local midrange_cutout_diameter = param("Midrange cutout diameter", 101)
 local midrange_frame_diameter = param("Midrange frame diameter", 120)
 local midrange_bolt_radius = param("Midrange bolt radius", 55.8)
 local midrange_mount_hole_diameter = param("Midrange mount hole diameter", 4.5)
 local midrange_center_y = param("Midrange center Y", 340)
+local midrange_x_offset = param("Midrange X offset", -2)
 local wire_pass_through_diameter = param("Wire pass-through diameter", 12.5)
 local wire_pass_through_height = param("Wire pass-through height", 30)
 local wire_wall_side = param("Wire wall side", -1)
@@ -48,66 +48,43 @@ local emblem_engraving_depth = param("Emblem engraving depth", 0.125 * inch)
 local emblem_center_x = param("Emblem center X", -70)
 local emblem_center_y = param("Emblem center Y", cabinet_length - 75)
 
-local roof_radians = math.rad(roof_angle)
 local half_width = outside_width / 2
-local roof_rise = half_width * math.tan(roof_radians)
-local total_height = vertical_wall_height + roof_rise
-
--- Build an XZ profile and extrude it along +Y.
-local function section(profile, length)
-	return translate(rotate_x(extrude(profile, length), 90), 0, length, 0)
-end
-
-local outer_profile = poly_xy({
-	{ -half_width, 0 },
-	{ half_width, 0 },
-	{ half_width, vertical_wall_height },
-	{ 0, total_height },
-	{ -half_width, vertical_wall_height },
-})
-
--- Offset the inner roof faces normal to the outer roof faces. This retains a
--- consistent wall thickness rather than merely shrinking the outer profile.
 local inner_half_width = half_width - wall_thickness
-local inner_peak_height = total_height - wall_thickness / math.cos(roof_radians)
-local inner_eave_height = total_height
-	- math.tan(roof_radians) * inner_half_width
-	- wall_thickness / math.cos(roof_radians)
-local inner_profile = poly_xy({
-	{ -inner_half_width, wall_thickness },
-	{ inner_half_width, wall_thickness },
-	{ inner_half_width, inner_eave_height },
-	{ 0, inner_peak_height },
-	{ -inner_half_width, inner_eave_height },
-})
+local inner_width = outside_width - 2 * wall_thickness
+local inner_length = cabinet_length - 2 * wall_thickness
+local inner_height = cabinet_height - 2 * wall_thickness
 
-local outer_shell = chamfer_all(section(outer_profile, cabinet_length), box_edge_chamfer)
-local inner_cavity = translate(
-	section(inner_profile, cabinet_length - 2 * wall_thickness),
+local outer_shell = translate(
+	chamfer_all(box(outside_width, cabinet_length, cabinet_height), box_edge_chamfer),
+	-half_width,
 	0,
-	wall_thickness,
 	0
+)
+local inner_cavity = translate(
+	box(inner_width, inner_length, inner_height),
+	-inner_width / 2,
+	wall_thickness,
+	wall_thickness
 )
 local cabinet = difference(outer_shell, inner_cavity)
 
 -- The full-depth divider gives the midrange its own sealed chamber, preventing
 -- woofer back-wave pressure from modulating the midrange cone.
-local divider = translate(section(outer_profile, divider_thickness), 0, divider_y, 0)
+local divider = translate(box(outside_width, divider_thickness, cabinet_height), -half_width, divider_y, 0)
 cabinet = union(cabinet, divider)
 
 -- A full-height brace couples the large long panels. Its pill-shaped window
 -- keeps the woofer chamber acoustically continuous without sharp airflow edges.
 local function woofer_window_brace()
 	local overlap = 0.8
-	local brace_profile = poly_xy({
-		{ -inner_half_width - overlap, wall_thickness - overlap },
-		{ inner_half_width + overlap, wall_thickness - overlap },
-		{ inner_half_width + overlap, total_height - wall_thickness + overlap },
-		{ -inner_half_width - overlap, total_height - wall_thickness + overlap },
-	})
-	local brace = translate(section(brace_profile, woofer_brace_thickness), 0, woofer_brace_y, 0)
+	local brace = translate(
+		box(inner_width + 2 * overlap, woofer_brace_thickness, inner_height + 2 * overlap),
+		-inner_half_width - overlap,
+		woofer_brace_y,
+		wall_thickness - overlap
+	)
 	local opening_depth = woofer_brace_thickness + 2
-	local window_height = total_height / 2
+	local window_height = cabinet_height / 2
 	local cap_offset = (woofer_brace_window_width - woofer_brace_window_height) / 2
 	local center_window = translate(
 		box(woofer_brace_window_width - woofer_brace_window_height, opening_depth, woofer_brace_window_height),
@@ -123,38 +100,17 @@ end
 
 cabinet = union(cabinet, woofer_window_brace())
 
-local function roof_height(x)
-	return total_height - math.tan(roof_radians) * math.abs(x)
-end
-
--- A cutter whose axis follows a roof-face normal. side is -1 for the left roof
--- and +1 for the right roof.
-local function roof_cutter(diameter, inside_depth, outside_depth, center_x, center_y, center_z, side)
-	local angle = side * roof_angle
-	local angle_radians = math.rad(angle)
-	local cutter = cylinder(diameter, inside_depth + outside_depth)
-	cutter = rotate_y(cutter, angle)
+local function top_face_cutter(diameter, inside_depth, outside_depth, center_x, center_y)
 	return translate(
-		cutter,
-		center_x - math.sin(angle_radians) * inside_depth,
-		center_y,
-		center_z - math.cos(angle_radians) * inside_depth
-	)
-end
-
--- The raised baffle carries frames wider than a single 45 degree roof panel.
--- It overlaps the cabinet by 0.8 mm so the boolean union remains robust.
-local function roof_baffle(diameter, center_x, center_y, center_z, side)
-	local angle = side * roof_angle
-	local angle_radians = math.rad(angle)
-	local baffle = cylinder(diameter, baffle_thickness + 0.8)
-	baffle = rotate_y(baffle, angle)
-	return translate(
-		baffle,
+		cylinder(diameter, inside_depth + outside_depth),
 		center_x,
 		center_y,
-		center_z
+		cabinet_height - inside_depth
 	)
+end
+
+local function top_face_baffle(diameter, center_x, center_y)
+	return translate(cylinder(diameter, baffle_thickness + 0.8), center_x, center_y, cabinet_height)
 end
 
 -- One wire pass-through per sealed chamber, located in the lower portion of
@@ -188,7 +144,7 @@ end
 -- Art-deco NH monogram made from tapered polygonal letter strokes.
 local function monogram_emblem()
 	local cutter_height = emblem_engraving_depth + 0.2
-	local cutter_z = total_height - emblem_engraving_depth
+	local cutter_z = cabinet_height - emblem_engraving_depth
 	local function stroke(points)
 		return extrude(poly_xy(points), cutter_height)
 	end
@@ -207,56 +163,44 @@ local function monogram_emblem()
 	return translate(monogram, emblem_center_x, emblem_center_y, cutter_z)
 end
 
-local function add_driver_cuts(cuts, baffles, side, center_y, frame_diameter, cutout_diameter, bolt_radius, bolt_hole_diameter, bolt_angles)
+local function add_driver_cuts(cuts, baffles, side, center_y, center_x_offset, frame_diameter, cutout_diameter, bolt_radius, bolt_hole_diameter, bolt_angles)
 	local baffle_radius = frame_diameter / 2 + baffle_margin
-	local baffle_outer_x = baffle_radius * math.cos(roof_radians)
-		+ baffle_thickness * math.sin(roof_radians)
-	local center_x = side * (half_width - baffle_outer_x - baffle_side_inset)
-	local center_z = roof_height(center_x)
+	local center_x = side * (half_width - baffle_radius - baffle_side_inset) + center_x_offset
 	local inside_depth = wall_thickness + 2
 	local outside_depth = 20
 
 	table.insert(
 		baffles,
-		roof_baffle(
+		top_face_baffle(
 			frame_diameter + 2 * baffle_margin,
 			center_x,
-			center_y,
-			center_z,
-			side
+			center_y
 		)
 	)
 
 	table.insert(
 		cuts,
-		roof_cutter(
+		top_face_cutter(
 			cutout_diameter,
 			inside_depth,
 			outside_depth,
 			center_x,
-			center_y,
-			center_z,
-			side
+			center_y
 		)
 	)
 
-	local angle_radians = side * roof_radians
 	for _, angle_degrees in ipairs(bolt_angles) do
 		local theta = math.rad(angle_degrees)
-		local roof_axis_offset = bolt_radius * math.cos(theta)
+		local x_offset = bolt_radius * math.cos(theta)
 		local y_offset = bolt_radius * math.sin(theta)
-		local hole_x = center_x + math.cos(angle_radians) * roof_axis_offset
-		local hole_z = center_z - math.sin(angle_radians) * roof_axis_offset
 		table.insert(
 			cuts,
-			roof_cutter(
+			top_face_cutter(
 				bolt_hole_diameter,
 				inside_depth,
 				outside_depth,
-				hole_x,
-				center_y + y_offset,
-				hole_z,
-				side
+				center_x + x_offset,
+				center_y + y_offset
 			)
 		)
 	end
@@ -293,6 +237,7 @@ add_driver_cuts(
 	baffles,
 	-1,
 	woofer_center_y,
+	woofer_x_offset,
 	woofer_frame_diameter,
 	woofer_cutout_diameter,
 	woofer_bolt_radius,
@@ -304,6 +249,7 @@ add_driver_cuts(
 	baffles,
 	1,
 	midrange_center_y,
+	midrange_x_offset,
 	midrange_frame_diameter,
 	midrange_cutout_diameter,
 	midrange_bolt_radius,
