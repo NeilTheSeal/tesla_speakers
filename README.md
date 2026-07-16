@@ -2,9 +2,13 @@
 
 Parametric, 3D-printable sealed speaker enclosure for a rear-cabin car-floor
 prototype. The cabinet is modeled in [CodeCAD](https://codecad.xyz/) with Lua
-and is designed for active DSP/crossover use.
+and is designed for active DSP/crossover use. Below is the generated object:
 
 ![Cabinet render](assets/cabinet_render.png)
+
+This is used for a speaker assembly:
+
+![Speaker Assembly](assets/perspective_render_with_speakers.png)
 
 ## Drivers
 
