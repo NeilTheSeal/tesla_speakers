@@ -419,7 +419,7 @@ for index = 0, 6 do
 	table.insert(woofer_bolt_angles, 360 * index / 7)
 end
 
-local midrange_bolt_angles = { -15, 15, 105, 135, 225, 255 }
+local midrange_bolt_angles = { 15.588362830481023, 464.411637169519, 135.58836283048103, 584.411637169519, 255.58836283048103, 344.411637169519 }
 
 add_driver_cuts(
 	cuts,
