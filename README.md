@@ -2,13 +2,17 @@
 
 Parametric, 3D-printable sealed speaker enclosure for a rear-cabin car-floor
 prototype. The cabinet is modeled in [CodeCAD](https://codecad.xyz/) with Lua
-and is designed for active DSP/crossover use. Below is the generated object:
+and is designed for active DSP/crossover use.
 
-![Cabinet render](assets/cabinet_render.png)
+## Renders
 
-This is used for a speaker assembly:
+Generated cabinet model:
 
-![Speaker Assembly](assets/perspective_render_with_speakers.png)
+![Cabinet render](assets/images/cabinet_render.png)
+
+Assembly render with both drivers and PG7 cable glands installed:
+
+![Speaker Assembly](assets/images/perspective_render_with_speakers_2.png)
 
 ## Drivers
 
@@ -32,7 +36,8 @@ values in the script before committing a full-size print.
   nearby mounting-hole material.
 - Internal woofer window brace with a rounded pill opening to stiffen the long
   cabinet walls while maintaining air movement within the woofer chamber.
-- Two 12.5 mm side-wall wire pass-throughs, one for each sealed chamber.
+- Two 12.5 mm side-wall wire pass-throughs, one for each sealed chamber and
+  sized for PG7 cable glands.
 - Four Sorbothane-ready isolation feet: 38.1 mm diameter, 19.05 mm tall, with
   26.9875 mm diameter by 6.35 mm deep pad pockets.
 - Flared foot collars and underside X cross-bracing for a stiffer bottom panel.
@@ -42,13 +47,20 @@ values in the script before committing a full-size print.
 ## Files
 
 ```text
-assets/cabinet_render.png     Cabinet preview used above
-parts/part.lua               Parametric CodeCAD model
-generated/part.stl           Generated print mesh after a build
-generated/part.step          Generated solid model after a build
-12mu-4731t00/                Supplied midrange CAD files
-22w-4851t00/                 Supplied woofer CAD files
-project.json                 CodeCAD project definition
+assets/images/                                   Cabinet and assembly renders
+assets/images/cabinet_render.png                 Generated cabinet render
+assets/images/perspective_render_with_speakers.png
+                                                 Early driver assembly render
+assets/images/perspective_render_with_speakers_2.png
+                                                 Assembly render with cable glands
+assets/objects/PG7_CABLE_GLAND.STEP              Cable-gland reference model
+parts/part.lua                                   Parametric CodeCAD model
+scripts/angle_calculator.js                      Mounting-hole angle helper
+generated/part.stl                               Generated print mesh after a build
+generated/part.step                              Generated solid model after a build
+12mu-4731t00/                                    Supplied midrange CAD files
+22w-4851t00/                                     Supplied woofer CAD files
+project.json                                     CodeCAD project definition
 ```
 
 ## Build
