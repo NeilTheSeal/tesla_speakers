@@ -53,6 +53,9 @@ local foot_height = param("Foot height", 0.75 * inch)
 local foot_corner_inset = param("Foot corner inset", 8)
 local foot_collar_height = param("Foot collar height", 6)
 local foot_collar_flare = param("Foot collar flare", 5)
+local bottom_brace_height = param("Bottom cross-brace height", 6)
+local bottom_brace_width = param("Bottom cross-brace width", 12)
+local bottom_brace_foot_overlap = param("Bottom cross-brace foot overlap", 12)
 local isolation_pad_diameter = param("Isolation pad diameter", 1.0625 * inch)
 local isolation_pad_recess_depth = param("Isolation pad recess depth", 0.25 * inch)
 local foot_edge_chamfer = param("Foot edge chamfer", 1.5)
@@ -266,6 +269,20 @@ local function isolation_foot(center_x, center_y)
 	return union(foot, collar), recess
 end
 
+-- Two low-profile diagonal beams tie the foot collars together and brace the
+-- broad bottom panel without extending below the Sorbothane contact surface.
+local function bottom_cross_braces(foot_x, foot_y)
+	local span_x = 2 * foot_x
+	local span_y = cabinet_length - 2 * foot_y
+	local diagonal_length = math.sqrt(span_x * span_x + span_y * span_y) + 2 * bottom_brace_foot_overlap
+	local diagonal_angle = math.deg(math.atan(span_y, span_x))
+	local center_y = cabinet_length / 2
+	local brace = center_xy(box(diagonal_length, bottom_brace_width, bottom_brace_height))
+	local forward_brace = translate(rotate_z(brace, diagonal_angle), 0, center_y, -bottom_brace_height)
+	local reverse_brace = translate(rotate_z(brace, -diagonal_angle), 0, center_y, -bottom_brace_height)
+	return { forward_brace, reverse_brace }
+end
+
 -- A shallow rounded panel frames the deeper NH monogram engraving.
 local function badge_panel()
 	local cutter_height = badge_panel_depth + 0.2
@@ -384,6 +401,7 @@ local foot_recesses = {}
 local foot_radius = foot_diameter / 2
 local foot_x = half_width - foot_radius - foot_corner_inset
 local foot_y = foot_radius + foot_corner_inset
+local bottom_braces = bottom_cross_braces(foot_x, foot_y)
 local foot_positions = {
 	{ -foot_x, foot_y },
 	{ foot_x, foot_y },
@@ -456,4 +474,5 @@ cabinet = chamfer(cabinet, wire_hole_edges, wire_hole_chamfer)
 cabinet = union(cabinet, table.unpack(ribs))
 cabinet = union(cabinet, table.unpack(end_ribs))
 cabinet = union(cabinet, table.unpack(bumpers))
+cabinet = union(cabinet, table.unpack(bottom_braces))
 emit(cabinet)
