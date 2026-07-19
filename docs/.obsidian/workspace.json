@@ -1,0 +1,172 @@
+{
+  "main": {
+    "id": "c4a41d7dcd180531",
+    "type": "split",
+    "children": [
+      {
+        "id": "2ee9eaa0ac4c54ad",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a1c95f7188ad9553",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "PROJECT.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "PROJECT"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2e2e89f8c416e80a",
+    "type": "split",
+    "children": [
+      {
+        "id": "9c2ff7aa708c19fc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2eeb07d86cf80ab6",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "5149b460470da6d7",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "59388069e00f2317",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 248.5
+  },
+  "right": {
+    "id": "3a2173bdd6744c04",
+    "type": "split",
+    "children": [
+      {
+        "id": "f792b8fc9bc78861",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "728b32f59dc9716b",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "PROJECT.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for PROJECT"
+            }
+          },
+          {
+            "id": "40f21d90b4f9c456",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "PROJECT.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from PROJECT"
+            }
+          },
+          {
+            "id": "c07175c72a2e8c21",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "96a4f20f54319365",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "PROJECT.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of PROJECT"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "bases:Create new base": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "2eeb07d86cf80ab6",
+  "lastOpenFiles": [
+    "WORK_HISTORY.md",
+    "REQUIREMENTS.md"
+  ]
+}
