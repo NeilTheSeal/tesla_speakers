@@ -515,6 +515,21 @@ The following values describe the current prototype body and are design baseline
 - **Requirement:** The project shall identify which model is authoritative when CodeCAD and SolidWorks versions coexist.
 - **Verification:** Document review
 
+### MFG-002b — Printer commissioning record
+
+- **Priority:** MUST
+- **Status:** TBD (printer delivered; commissioning not yet recorded)
+- **Requirement:** Before printing enclosure-scale geometry, the printer shall complete its manufacturer-recommended assembly and calibration process and produce a documented small calibration print.
+- **Record:** Printer model, nozzle size, build surface, slicer and profile, filament identity, relevant calibration settings, observed defects, and measured X/Y/Z dimensions.
+- **Verification:** Inspection, measurement, and document review
+
+### MFG-002c — Delivered-material identification
+
+- **Priority:** MUST
+- **Status:** TBD
+- **Requirement:** Filament shall be identified by polymer, manufacturer, nominal diameter, and intended role before use. Material of unknown composition shall not be used for the full enclosure or road-use structural parts.
+- **Verification:** Label inspection and document review
+
 ### MFG-003 — One-piece preference
 
 - **Priority:** SHOULD

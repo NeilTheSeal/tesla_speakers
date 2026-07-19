@@ -4,8 +4,8 @@ project: Tesla Rear-Cabin Speaker
 status: Active
 version: 0.1
 last_updated: 2026-07-18
-current_phase: Prototype enclosure revision
-immediate_next_goal: Create and validate a removable, gasketed side-access panel for the V1 enclosure
+current_phase: Fabrication readiness and physical verification
+immediate_next_goal: Inventory the delivered equipment and commission the 3D printer with a documented calibration print
 ---
 
 # Tesla Rear-Cabin Speaker — Work History
@@ -55,9 +55,11 @@ When updating this file:
 
 ## Current phase
 
-**Prototype enclosure revision before the first full print**
+**Fabrication readiness and physical verification before the first full print**
 
 The current repository contains a complete parametric two-driver enclosure model and generated STEP/STL exports. The mechanical model already includes two isolated sealed chambers, driver openings, internal bracing, isolation feet, cable-gland openings, and cosmetic exterior features.
+
+The 3D printer, speakers, filament, tools, and additional project supplies have now been reported as delivered. Exact models, quantities, material types, and dimensions have not yet been inventoried or verified. The project can therefore move from planning-only work into physical validation, but it is not ready for a full enclosure print.
 
 The project architecture has since expanded from a two-driver active prototype to a three-driver system using:
 
@@ -70,19 +72,18 @@ The current enclosure source has not yet been revised to include the tweeter, pa
 
 ## Immediate next goal
 
-**Create and validate one removable, gasketed side-access panel in the CAD model.**
+**Inventory the delivered equipment and commission the 3D printer with a documented calibration print.**
 
-The first implementation should:
+The first work session should:
 
-1. Convert one side-wall region into a removable panel.
-2. Add a locating lip or rabbet so the panel cannot slide under vibration.
-3. Add a continuous gasket land or groove.
-4. Define a provisional machine-screw and threaded-insert pattern.
-5. Preserve the sealed volume of both chambers.
-6. Avoid interference with the existing ribs, brace, feet, driver baskets, and wire exits.
-7. Produce a small insert-and-gasket test coupon before relying on the joint in a full print.
+1. Record the printer model, nozzle size, build surface, and available slicer.
+2. Record each filament type, diameter, and manufacturer; keep standard PLA limited to coupons and short-duration fit work.
+3. Identify the physical woofer, midrange, and tweeter by exact model number and inspect for shipping damage.
+4. Sort fasteners, inserts, gasket materials, terminals, wire, adhesives, and measurement tools by intended use.
+5. Assemble and calibrate the printer according to its manufacturer procedure.
+6. Print one small manufacturer-recommended calibration model and record material, profile, result, and any dimensional error.
 
-This is the next task because service access is needed before the tweeter crossover, binding posts, internal wiring, and future revisions can be installed and changed conveniently.
+This is the next task because every subsequent fit coupon and enclosure decision depends on knowing what hardware and material are actually available and whether the printer can produce dimensionally useful parts. After this gate passes, physically measure the drivers and vehicle envelope, then return to the removable-panel CAD revision and feature coupons.
 
 ## Current major blockers
 
@@ -998,8 +999,43 @@ Copy this template for future work:
 
 ---
 
+## WH-040 — Fabrication hardware arrived and execution sequence reset
+
+- **Date:** 2026-07-18
+- **Status:** Reported; physical inventory pending
+- **Goal:** Convert the arrival of fabrication equipment and components into a safe, low-waste execution plan.
+- **Newly reported on hand:**
+  - 3D printer
+  - speakers
+  - filament
+  - tools
+  - additional project-related supplies
+- **Confirmed facts:** The user reports that these categories have arrived.
+- **Not yet verified:** Exact printer model and configuration; individual driver model numbers and condition; filament polymers and quantities; fastener, insert, gasket, wiring, and measurement-tool inventory.
+- **Decision:** Printer commissioning, inventory, and physical dimensional verification now precede additional CAD commitment. The removable side-access panel remains the next CAD feature, but it is no longer the immediate physical task.
+- **Plan of attack:**
+  1. Inventory and inspect all delivered items; photograph labels or record exact part numbers where useful.
+  2. Assemble, update only if required by the manufacturer, calibrate, and safely test the printer.
+  3. Print a small calibration object; record filament, nozzle, slicer profile, dimensional result, adhesion, and visible defects.
+  4. Measure the physical woofer, midrange, and tweeter mounting geometry and compare it with CAD and datasheets.
+  5. Reconfirm the vehicle installation envelope, seat travel, HVAC clearance, cable route, and candidate restraint hard points using simple templates before a large print.
+  6. Resolve the provisional material choice and verify the 415 mm model fits the actual usable slicer/bed envelope.
+  7. Implement the single removable, gasketed side panel in CAD.
+  8. Print focused coupons for driver cutouts, inserts/fasteners, gasket compression, binding posts, PG7 glands, and the Sorbothane pocket.
+  9. Revise CAD from coupon results, calculate net chamber volumes, model the woofer alignment, and freeze a V1 print candidate.
+  10. Slice and review the full enclosure for orientation, supports, time, material use, collision/clearance, and failure risk before starting it.
+- **Safety gates:**
+  - Do not power loose drivers at meaningful level without suitable filtering and secure support.
+  - Do not use standard PLA as the final road-use structural enclosure.
+  - Do not begin occupied-road use until a positive mechanical restraint is designed and validated.
+- **Current state:** The project has entered fabrication readiness; no physical inspection, printer calibration, dimensional verification, or test print has yet been recorded.
+- **Immediate next action:** Complete the equipment inventory and one documented printer calibration print. Stop before printing enclosure-scale geometry.
+- **Open questions:** Exact delivered models/materials, whether the tweeter is physically present, which measurement and impedance tools are available, and which filament is intended for the road-use enclosure.
+
+---
+
 # 17. Immediate Next Action
 
-Open `parts/part.lua` or the corresponding SolidWorks model and implement a **single removable side-access panel** with a locating lip, continuous gasket land, and provisional threaded-insert bosses.
+Inventory the delivered equipment and complete **one documented printer calibration print** using a low-cost filament appropriate for commissioning.
 
-Stop after generating and inspecting the revised CAD. Do not add the tweeter, binding posts, or full crossover in the same change. Keeping this revision focused will make it easier to identify whether the new panel compromises sealing, stiffness, or printability.
+Record the printer model, nozzle, build surface, slicer/profile, filament type, calibration result, and measured X/Y/Z dimensions. Stop before printing enclosure-scale geometry. The next gate is physical driver and vehicle-envelope verification; the removable service panel remains the next focused CAD revision after those checks.

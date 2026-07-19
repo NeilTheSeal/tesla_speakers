@@ -4,7 +4,7 @@ A parametric, 3D-printable sealed speaker enclosure for the rear cabin floor beh
 
 **Current System:** 3-driver mono loudspeaker (woofer + midrange + tweeter) with sealed chambers and removable, gasketed service panels for future modifications.
 
-**Current Phase:** Prototype enclosure development with focus on removable side-access panel design.
+**Current Phase:** Fabrication readiness: inventory delivered hardware, commission the printer, and verify physical dimensions before revising or printing the enclosure.
 
 For comprehensive project documentation, see `docs/` folder ([PROJECT.md](docs/PROJECT.md), [REQUIREMENTS.md](docs/REQUIREMENTS.md), [WORK_HISTORY.md](docs/WORK_HISTORY.md)).
 
@@ -54,7 +54,7 @@ Assembly render with both drivers and PG7 cable glands installed:
 - Flared foot collars and underside X cross-bracing for stiffness
 - Low-relief exterior detail elements
 
-**Current Milestone:** Design and validate a removable, gasketed side-access panel revision to enable tweeter and crossover integration without full enclosure re-printing.
+**Current Milestone:** Complete one documented printer calibration print, then verify the physical drivers and vehicle envelope. The removable, gasketed side panel remains the next focused CAD revision; no full enclosure print should begin until those gates and feature coupons pass.
 
 ## Files
 
@@ -131,4 +131,7 @@ pattern together.
 This is a proof-of-concept enclosure intended for active tuning and in-car
 measurement. Validate the final response, crossover settings, sealing, and
 mechanical fit with the actual drivers before treating it as a permanent
-installation.
+installation. The printer, speakers, filament, tools, and related supplies have
+been reported as delivered, but exact inventory and commissioning results are
+not yet recorded. The immediate sequence is inventory → printer calibration →
+physical driver and vehicle checks → focused feature coupons → full-print review.

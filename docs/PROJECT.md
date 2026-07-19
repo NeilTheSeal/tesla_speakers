@@ -87,7 +87,7 @@ The enclosure is currently being generated primarily with CodeCAD in Lua. More d
 
 The design should remain easy to revise. Prototype print time and material use are acceptable costs if a new enclosure revision materially improves fit, strength, serviceability, or acoustic performance.
 
-**Current immediate milestone:** Develop and validate a removable, gasketed side-access panel revision to enable future tweeter and crossover modifications without full enclosure reprinting.
+**Current immediate milestone:** Establish fabrication readiness by inventorying the delivered hardware, commissioning the 3D printer, and completing one documented calibration print. Physical driver and vehicle-envelope verification follow before the removable-panel CAD revision and full-size printing.
 
 ---
 
@@ -260,7 +260,7 @@ Additional files may be added later for specific topics such as measurements, cr
 
 ## Current Project State
 
-The project is currently in the enclosure-design and system-planning stage.
+The project is currently in the fabrication-readiness and physical-verification stage. The printer, speakers, filament, tools, and related supplies have been reported as delivered, but exact inventory and physical verification are pending.
 
 Completed or substantially developed work includes:
 
