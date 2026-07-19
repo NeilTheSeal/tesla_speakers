@@ -6,12 +6,12 @@ local inch = 25.4
 -- Cabinet geometry. The 410 mm length keeps this one-piece model within the
 -- stated 420 x 420 x 480 mm printer build volume.
 local outside_width = param("Outside width", 9.5 * inch)
-local cabinet_length = param("Cabinet length", 410)
+local cabinet_length = param("Cabinet length", 460)
 local wall_thickness = param("Wall thickness", 8)
-local cabinet_height = param("Cabinet height", 220)
-local divider_y = param("Woofer chamber length", 270)
+local cabinet_height = param("Cabinet height", 240)
+local divider_y = param("Woofer chamber length", 266)
 local divider_thickness = param("Divider thickness", 8)
-local woofer_brace_y = param("Woofer window brace Y", 245)
+local woofer_brace_y = param("Woofer window brace Y", 240)
 local woofer_brace_thickness = param("Woofer window brace thickness", 8)
 local woofer_brace_window_width = param("Woofer brace window width", 160)
 local woofer_brace_window_height = param("Woofer brace window height", 90)
@@ -41,7 +41,7 @@ local midrange_cutout_diameter = param("Midrange cutout diameter", 101)
 local midrange_frame_diameter = param("Midrange frame diameter", 120)
 local midrange_bolt_radius = param("Midrange bolt radius", 55.8)
 local midrange_mount_hole_diameter = param("Midrange mount hole diameter", 4.5)
-local midrange_center_y = param("Midrange center Y", 340)
+local midrange_center_y = param("Midrange center Y", 391)
 local midrange_x_offset = param("Midrange X offset", -2)
 local midrange_rear_chamfer = param("Midrange rear cutout chamfer", 2)
 local wire_pass_through_diameter = param("Wire pass-through diameter", 12.5)
@@ -60,13 +60,16 @@ local isolation_pad_diameter = param("Isolation pad diameter", 1.0625 * inch)
 local isolation_pad_recess_depth = param("Isolation pad recess depth", 0.25 * inch)
 local foot_edge_chamfer = param("Foot edge chamfer", 1.5)
 local wire_hole_chamfer = param("Wire hole chamfer", 1)
-local emblem_engraving_depth = param("Emblem engraving depth", 0.125 * inch)
-local emblem_center_x = param("Emblem center X", -70)
-local emblem_center_y = param("Emblem center Y", cabinet_length - 75)
-local badge_panel_depth = param("Badge panel depth", 1)
-local badge_panel_width = param("Badge panel width", 88)
-local badge_panel_height = param("Badge panel height", 100)
-local badge_panel_corner_radius = param("Badge panel corner radius", 10)
+-- Tweeter mounting geometry. The through-hole into the chamber only needs about
+-- 77 mm; the default 85 mm cutout leaves a little wiggle room. The 104.25 mm
+-- mounting bracket is the outer flange the baffle must support, which is the
+-- direct analog of the woofer/midrange frame diameter. Bolt holes are deferred
+-- until their exact locations are measured in SolidWorks.
+local tweeter_cutout_diameter = param("Tweeter cutout diameter", 85)
+local tweeter_bracket_diameter = param("Tweeter bracket outer diameter", 104.25)
+local tweeter_rear_chamfer = param("Tweeter rear cutout chamfer", 2)
+local tweeter_center_y = param("Tweeter center Y", 318)
+local tweeter_center_x = param("Tweeter center X", -60)
 
 local half_width = outside_width / 2
 local inner_half_width = half_width - wall_thickness
@@ -283,68 +286,21 @@ local function bottom_cross_braces(foot_x, foot_y)
 	return { forward_brace, reverse_brace }
 end
 
--- A shallow rounded panel frames the deeper NH monogram engraving.
-local function badge_panel()
-	local cutter_height = badge_panel_depth + 0.2
-	local cutter_z = cabinet_height - badge_panel_depth
-	local radius = badge_panel_corner_radius
-	local half_panel_width = badge_panel_width / 2
-	local half_panel_height = badge_panel_height / 2
-	local center_bar = translate(
-		box(badge_panel_width - 2 * radius, badge_panel_height, cutter_height),
-		emblem_center_x - half_panel_width + radius,
-		emblem_center_y - half_panel_height,
-		cutter_z
-	)
-	local side_bar = translate(
-		box(badge_panel_width, badge_panel_height - 2 * radius, cutter_height),
-		emblem_center_x - half_panel_width,
-		emblem_center_y - half_panel_height + radius,
-		cutter_z
-	)
-	local corners = {}
-	for _, x_sign in ipairs({ -1, 1 }) do
-		for _, y_sign in ipairs({ -1, 1 }) do
-			table.insert(
-				corners,
-				translate(
-					cylinder(2 * radius, cutter_height),
-					emblem_center_x + x_sign * (half_panel_width - radius),
-					emblem_center_y + y_sign * (half_panel_height - radius),
-					cutter_z
-				)
-			)
-		end
-	end
-	return union(center_bar, side_bar, table.unpack(corners))
-end
-
--- Art-deco NH monogram made from tapered polygonal letter strokes.
-local function monogram_emblem()
-	local cutter_height = emblem_engraving_depth + 0.2
-	local cutter_z = cabinet_height - emblem_engraving_depth
-	local function stroke(points)
-		return extrude(poly_xy(points), cutter_height)
-	end
-
-	local monogram = union(
-		-- N
-		stroke({ { -40, -32 }, { -32, -32 }, { -24, 32 }, { -32, 32 } }),
-		stroke({ { -12, -32 }, { -4, -32 }, { 2, 32 }, { -6, 32 } }),
-		stroke({ { -30, 32 }, { -22, 32 }, { -4, -32 }, { -12, -32 } }),
-		-- H
-		stroke({ { 7, -32 }, { 14, -32 }, { 17, 32 }, { 10, 32 } }),
-		stroke({ { 32, -32 }, { 40, -32 }, { 40, 32 }, { 32, 32 } }),
-		stroke({ { 12, -4 }, { 36, -4 }, { 36, 4 }, { 12, 4 } })
-	)
-	monogram = rotate_z(monogram, -90)
-	return translate(monogram, emblem_center_x, emblem_center_y, cutter_z)
-end
-
-local function add_driver_cuts(cuts, baffles, trim_rings, trim_ring_cuts, side, center_y, center_x_offset, frame_diameter, cutout_diameter, rear_chamfer, bolt_radius, bolt_hole_diameter, bolt_angles)
+-- Snap a baffle of the given frame diameter flush against one side wall
+-- (side = -1 or 1), then apply a manual offset. Used to auto-place the woofer
+-- and midrange against opposite walls. The tweeter is positioned absolutely
+-- instead, so it does not use this helper.
+local function side_snapped_center_x(side, frame_diameter, center_x_offset)
 	local baffle_radius = frame_diameter / 2 + baffle_margin
+	return side * (half_width - baffle_radius - baffle_side_inset) + center_x_offset
+end
+
+-- Shared driver baffle builder. Every driver (woofer, midrange, tweeter) uses
+-- the same construction: a raised baffle sized to the frame/bracket diameter,
+-- a trim ring, a through-cutout smaller than the frame, and a rear relief flare.
+-- Pass an empty bolt_angles table to defer bolt holes.
+local function add_driver_cuts(cuts, baffles, trim_rings, trim_ring_cuts, center_x, center_y, frame_diameter, cutout_diameter, rear_chamfer, bolt_radius, bolt_hole_diameter, bolt_angles)
 	local baffle_diameter = frame_diameter + 2 * baffle_margin
-	local center_x = side * (half_width - baffle_radius - baffle_side_inset) + center_x_offset
 	local inside_depth = wall_thickness + 2
 	local outside_depth = 20
 
@@ -426,9 +382,8 @@ add_driver_cuts(
 	baffles,
 	trim_rings,
 	trim_ring_cuts,
-	-1,
+	side_snapped_center_x(-1, woofer_frame_diameter, woofer_x_offset),
 	woofer_center_y,
-	woofer_x_offset,
 	woofer_frame_diameter,
 	woofer_cutout_diameter,
 	woofer_rear_chamfer,
@@ -441,9 +396,8 @@ add_driver_cuts(
 	baffles,
 	trim_rings,
 	trim_ring_cuts,
-	1,
+	side_snapped_center_x(1, midrange_frame_diameter, midrange_x_offset),
 	midrange_center_y,
-	midrange_x_offset,
 	midrange_frame_diameter,
 	midrange_cutout_diameter,
 	midrange_rear_chamfer,
@@ -452,10 +406,28 @@ add_driver_cuts(
 	midrange_bolt_angles
 )
 
+-- The tweeter uses the same baffle builder as the other drivers. It is placed at
+-- an absolute center_x (it does not snap to a side wall) and has no bolt holes yet.
+-- Its through-cutout (85 mm) is smaller than its 104.25 mm mounting bracket, matching
+-- the frame-vs-cutout relationship of the woofer and midrange.
+add_driver_cuts(
+	cuts,
+	baffles,
+	trim_rings,
+	trim_ring_cuts,
+	tweeter_center_x,
+	tweeter_center_y,
+	tweeter_bracket_diameter,
+	tweeter_cutout_diameter,
+	tweeter_rear_chamfer,
+	0,
+	0,
+	{}
+)
+
 table.insert(cuts, wire_pass_through(woofer_center_y))
 table.insert(cuts, wire_pass_through(midrange_center_y))
-table.insert(cuts, badge_panel())
-table.insert(cuts, monogram_emblem())
+
 for _, trim_ring_cut in ipairs(trim_ring_cuts) do
 	table.insert(cuts, trim_ring_cut)
 end
@@ -470,7 +442,7 @@ cabinet = difference(cabinet, union(table.unpack(cuts)))
 
 local wire_wall_face = wire_wall_side < 0 and "xmin" or "xmax"
 local wire_hole_edges = edges(cabinet):on_box_side(wire_wall_face):geom("circle"):collect()
-cabinet = chamfer(cabinet, wire_hole_edges, wire_hole_chamfer)
+-- cabinet = chamfer(cabinet, wire_hole_edges, wire_hole_chamfer)
 cabinet = union(cabinet, table.unpack(ribs))
 cabinet = union(cabinet, table.unpack(end_ribs))
 cabinet = union(cabinet, table.unpack(bumpers))

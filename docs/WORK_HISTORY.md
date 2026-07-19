@@ -1063,6 +1063,34 @@ Copy this template for future work:
 
 ---
 
+## WH-043 — Tweeter baffle opening added to enclosure CAD
+
+- **Date:** 2026-07-19
+- **Status:** Completed
+- **Goal:** Add a tweeter mounting opening to replace the cosmetic NH emblem, enabling integration of the Scan-Speak D3004/662000 tweeter.
+- **Changes made to `parts/part.lua`:**
+  - Removed `badge_panel()` and `monogram_emblem()` functions
+  - Added tweeter parameters:
+    - `tweeter_bracket_diameter = 104.25 mm` (provisional based on D3004 mounting bracket spec)
+    - `tweeter_center_y = 350 mm` (positioned to fit within 410 mm cabinet length)
+    - `tweeter_x_offset = 0` (centered on cabinet width)
+  - Added `tweeter_baffle_opening()` function to create tweeter cutout with:
+    - Main bracket cutout with raised baffle ring and trim ring
+    - Rear relief chamfer (2 mm)
+    - Same construction style as woofer and midrange baffles
+  - No bolt holes added; user to measure exact locations in SolidWorks
+- **Geometry validation:**
+  - Tweeter extent: Y = 298 to 402 mm (fits within 0–410 mm cabinet length with 8 mm rear margin)
+  - No collision with midrange (Y = 340 mm, rear to ~400 mm)
+  - Centered on top face, consistent with other driver placements
+- **Generated files (rebuilt successfully):**
+  - `generated/part.step` (updated)
+  - `generated/part.stl` (updated)
+- **Next action:** Measure precise tweeter bolt-hole locations in SolidWorks CAD using the D3004_662000.STEP model, then implement mounting holes.
+- **Open questions:** Final X offset and Z positioning (if any tilt needed for acoustic optimization).
+
+---
+
 # 17. Immediate Next Action
 
 Inventory the delivered equipment and complete **one documented printer calibration print** using a low-cost filament appropriate for commissioning.
