@@ -40,7 +40,7 @@ The sensitivity figures are not sufficient by themselves to set final relative l
 
 # 3. Scan-Speak Illuminator 12MU/4731T00 midrange
 
-<img src="../assets/images/12MU-4731-T00_IMG.png" width="500" />
+<img src="../assets/images/12MU-4731T00_IMG.png" width="500" />
 
 ## 3.1 Thiele-Small parameters
 
@@ -111,9 +111,7 @@ The power ratings are tied to the manufacturer's stated test conditions. They do
 
 ## 3.7 Manufacturer response and impedance curves
 
-![12MU/4731T00 manufacturer response and impedance curves](../assets/images/12MU-4851-T00_FRC.png)
-
-Source-file caution: the PNG filename and title say `12MU/4851-T00`, but the project driver and source datasheet are `12MU/4731T00`. Treat the PNG as a crop of the 12MU/4731T00 datasheet unless a different source is later identified.
+![12MU/4731T00 manufacturer response and impedance curves](../assets/images/12MU-4851T00_FRC.png)
 
 Qualitative reading only:
 
@@ -126,7 +124,7 @@ Qualitative reading only:
 
 # 4. Scan-Speak Revelator 22W/4851T00 woofer
 
-<img src="../assets/images/22W-4851-T00_IMG.png" width="500" />
+<img src="../assets/images/22W-4851T00_IMG.png" width="500" />
 
 ## 4.1 Thiele-Small parameters
 
@@ -197,7 +195,7 @@ The power ratings are tied to the manufacturer's stated test conditions. Safe ou
 
 ## 4.7 Manufacturer response and impedance curves
 
-![22W/4851T00 manufacturer response and impedance curves](../assets/images/22W-4851-T00_FRC.png)
+![22W/4851T00 manufacturer response and impedance curves](../assets/images/22W-4851T00_FRC.png)
 
 Qualitative reading only:
 
@@ -210,7 +208,7 @@ Qualitative reading only:
 
 # 5. Scan-Speak Illuminator D3004/662000 tweeter
 
-<img src="../assets/images/d3004-6620-00_IMG.png" width="500" />
+<img src="../assets/images/d3004-662000_IMG.png" width="500" />
 
 ## 5.1 Thiele-Small parameters
 
@@ -281,7 +279,7 @@ The published power ratings presume the stated filtering and manufacturer test c
 
 ## 5.7 Manufacturer response and impedance curves
 
-![D3004/662000 manufacturer response and impedance curves](../assets/images/d3004-6620-00_FRC.png)
+![D3004/662000 manufacturer response and impedance curves](../assets/images/d3004-662000_FRC.png)
 
 Qualitative reading only:
 
