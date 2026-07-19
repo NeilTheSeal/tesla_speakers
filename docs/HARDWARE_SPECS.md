@@ -40,6 +40,8 @@ The sensitivity figures are not sufficient by themselves to set final relative l
 
 # 3. Scan-Speak Illuminator 12MU/4731T00 midrange
 
+<img src="../assets/images/12MU-4731-T00_IMG.png" width="500" />
+
 ## 3.1 Thiele-Small parameters
 
 | Parameter                    | Symbol |               Value |
@@ -124,6 +126,8 @@ Qualitative reading only:
 
 # 4. Scan-Speak Revelator 22W/4851T00 woofer
 
+<img src="../assets/images/22W-4851-T00_IMG.png" width="500" />
+
 ## 4.1 Thiele-Small parameters
 
 | Parameter                    | Symbol |               Value |
@@ -205,6 +209,8 @@ Qualitative reading only:
 ---
 
 # 5. Scan-Speak Illuminator D3004/662000 tweeter
+
+<img src="../assets/images/d3004-6620-00_IMG.png" width="500" />
 
 ## 5.1 Thiele-Small parameters
 
