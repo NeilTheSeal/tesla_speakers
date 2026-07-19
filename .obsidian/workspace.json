@@ -1,24 +1,24 @@
 {
   "main": {
-    "id": "c4a41d7dcd180531",
+    "id": "d1c7f53f760d8a87",
     "type": "split",
     "children": [
       {
-        "id": "2ee9eaa0ac4c54ad",
+        "id": "cb8a13fa32c50ae5",
         "type": "tabs",
         "children": [
           {
-            "id": "a1c95f7188ad9553",
+            "id": "da30ed04d0fac6fc",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HARDWARE_SPECS.md",
+                "file": "docs/WORK_HISTORY.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "HARDWARE_SPECS"
+              "title": "WORK_HISTORY"
             }
           }
         ]
@@ -27,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "2e2e89f8c416e80a",
+    "id": "62adaa12e5e35c1e",
     "type": "split",
     "children": [
       {
-        "id": "9c2ff7aa708c19fc",
+        "id": "86969a09cfbe241b",
         "type": "tabs",
         "children": [
           {
-            "id": "2eeb07d86cf80ab6",
+            "id": "a5e16d63c2bb86d1",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -48,7 +48,7 @@
             }
           },
           {
-            "id": "5149b460470da6d7",
+            "id": "5e2683c2e786e8d8",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -65,7 +65,7 @@
             }
           },
           {
-            "id": "59388069e00f2317",
+            "id": "5f925af49773cdc4",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -78,23 +78,23 @@
       }
     ],
     "direction": "horizontal",
-    "width": 248.5
+    "width": 300
   },
   "right": {
-    "id": "3a2173bdd6744c04",
+    "id": "03cd15e57e223bed",
     "type": "split",
     "children": [
       {
-        "id": "f792b8fc9bc78861",
+        "id": "13b22422dd441aa4",
         "type": "tabs",
         "children": [
           {
-            "id": "728b32f59dc9716b",
+            "id": "c29c338a4fd0172e",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "PROJECT.md",
+                "file": "docs/WORK_HISTORY.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,46 +104,65 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for PROJECT"
+              "title": "Backlinks for WORK_HISTORY"
             }
           },
           {
-            "id": "40f21d90b4f9c456",
+            "id": "000dba2e465ed8ce",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "PROJECT.md",
+                "file": "docs/WORK_HISTORY.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from PROJECT"
+              "title": "Outgoing links from WORK_HISTORY"
             }
           },
           {
-            "id": "c07175c72a2e8c21",
+            "id": "56c4d2d8d0fb4f7e",
             "type": "leaf",
             "state": {
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-tags",
               "title": "Tags"
             }
           },
           {
-            "id": "96a4f20f54319365",
+            "id": "7acbae85d6c55efc",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "9cd79335e1f61cb5",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "PROJECT.md"
+                "file": "docs/WORK_HISTORY.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of PROJECT"
+              "title": "Outline of WORK_HISTORY"
             }
           }
         ]
@@ -155,21 +174,19 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "bases:Create new base": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
     }
   },
-  "active": "a1c95f7188ad9553",
+  "active": "da30ed04d0fac6fc",
   "lastOpenFiles": [
-    "PROJECT.md",
-    "HARDWARE_SPECS.md",
-    "PLAN.md",
-    "WORK_HISTORY.md",
-    "REQUIREMENTS.md"
+    "docs/REQUIREMENTS.md",
+    "docs/HARDWARE_SPECS.md",
+    "docs/PROJECT.md"
   ]
 }
