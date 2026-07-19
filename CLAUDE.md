@@ -2,7 +2,7 @@
 
 ## Project Context
 
-This is the **Tesla Model 3 Rear-Cabin Speaker Project** — a carefully engineered custom loudspeaker system for the rear cabin. All project documentation lives in the `./docs` folder (Obsidian vault ID `90b333e29c3676b1`), accessed via the Obsidian Local REST API at `https://127.0.0.1:27124/`. This markdown file is a reference point for any agent, whether it is Claude Code, ChatGPT Codex, or another tool.
+This is the **Tesla Model 3 Rear-Cabin Speaker Project** — a carefully engineered custom loudspeaker system for the rear cabin. All project documentation lives in the `./docs` folder (Obsidian vault ID `90b333e29c3676b1`), accessed directly via file read/write. This markdown file is a reference point for any agent, whether it is Claude Code, ChatGPT Codex, or another tool.
 
 ## Required: Read Project Docs at Session Start
 

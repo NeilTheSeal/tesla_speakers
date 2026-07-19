@@ -7,5 +7,79 @@
         "Authorization": "$OBSIDIAN_API_KEY"
       }
     }
-  }
+  },
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Read",
+      "Read(docs/*)",
+      "Edit(docs/*)",
+      "Write(docs/*)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(file *)",
+      "Bash(stat *)",
+      "Bash(pwd *)",
+      "Bash(tree *)",
+      "Bash(du *)",
+      "Bash(echo *)",
+      "Bash(jq *)",
+      "Bash(git log *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git branch *)",
+      "Bash(git tag *)",
+      "Bash(git blame *)",
+      "Bash(git remote *)",
+      "Bash(wc -l *)"
+    ],
+    "ask": [
+      "Bash(rm *)",
+      "Bash(rmdir *)",
+      "Bash(mv *)",
+      "Bash(cp *)",
+      "Bash(git reset *)",
+      "Bash(git clean *)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git checkout *)",
+      "Bash(git restore *)",
+      "Bash(git rebase *)",
+      "Bash(git branch -D *)",
+      "Bash(git branch -d *)",
+      "Bash(git merge --abort *)",
+      "Bash(git tag -d *)",
+      "Bash(git tag -D *)",
+      "Bash(git commit --amend *)",
+      "Bash(npm uninstall *)",
+      "Bash(npm remove *)",
+      "Bash(npm prune *)",
+      "Bash(pip uninstall *)",
+      "Bash(dd *)",
+      "Bash(mkfs *)",
+      "Bash(chmod *)",
+      "Bash(chown *)",
+      "Bash(kill *)",
+      "Bash(killall *)",
+      "Bash(sudo *)",
+      "Bash(eval *)",
+      "Bash(exec *)",
+      "Bash(source *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.certs)",
+      "Read(.certs/*)"
+    ]
+  },
+  "additionalDirectories": [
+    "docs"
+  ]
 }
