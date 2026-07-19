@@ -37,21 +37,25 @@ function angleBetweenThreePoints(point1, point2, point3) {
 }
 
 // Example:
-const point1 = { x: 486.407, y: 101.239 };
-const point2 = { x: 500.3, y: 155.302 };
-const point3 = { x: 460.426, y: 116.239 };
+// const point1 = { x: 486.407, y: 101.239 };
+// const point2 = { x: 500.3, y: 155.302 };
+// const point3 = { x: 460.426, y: 116.239 };
+
+const point1 = { x: 284.26859238, y: 94.22835938 };
+const point2 = { x: 315, y: 60 };
+const point3 = { x: 300.72307506, y: 103.72835938 };
 
 const angle = angleBetweenThreePoints(point1, point2, point3);
 
 // console.log(angle); // 90
 
-const drill_hole_1_angle = (-1 * angle) / 2 + 360;
-const drill_hole_2_angle = angle / 2;
+const drill_hole_1_angle = 0;
+const drill_hole_2_angle = angle;
 const drill_hole_3_angle = drill_hole_1_angle + 120;
 const drill_hole_4_angle = drill_hole_2_angle + 120;
 const drill_hole_5_angle = drill_hole_3_angle + 120;
 const drill_hole_6_angle = drill_hole_4_angle + 120;
 
 console.log(
-  `${drill_hole_2_angle}, ${drill_hole_3_angle}, ${drill_hole_4_angle}, ${drill_hole_5_angle}, ${drill_hole_6_angle}, ${drill_hole_1_angle}`,
+  `${drill_hole_1_angle}, ${drill_hole_2_angle}, ${drill_hole_3_angle}, ${drill_hole_4_angle}, ${drill_hole_5_angle}, ${drill_hole_6_angle}`,
 );

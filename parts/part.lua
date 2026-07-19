@@ -65,9 +65,13 @@ local wire_hole_chamfer = param("Wire hole chamfer", 1)
 -- mounting bracket is the outer flange the baffle must support, which is the
 -- direct analog of the woofer/midrange frame diameter. Bolt holes are deferred
 -- until their exact locations are measured in SolidWorks.
-local tweeter_cutout_diameter = param("Tweeter cutout diameter", 85)
+-- Bolt pattern measured in SolidWorks: six holes on a 92 mm pitch diameter
+-- (46 mm bolt radius); exact angles are listed in tweeter_bolt_angles below.
+local tweeter_cutout_diameter = param("Tweeter cutout diameter", 80)
 local tweeter_bracket_diameter = param("Tweeter bracket outer diameter", 104.25)
 local tweeter_rear_chamfer = param("Tweeter rear cutout chamfer", 2)
+local tweeter_bolt_radius = param("Tweeter bolt radius", 46)
+local tweeter_mount_hole_diameter = param("Tweeter mount hole diameter", 4.2)
 local tweeter_center_y = param("Tweeter center Y", 318)
 local tweeter_center_x = param("Tweeter center X", -60)
 
@@ -376,6 +380,7 @@ for index = 0, 6 do
 end
 
 local midrange_bolt_angles = { 15.588362830481023, 464.411637169519, 135.58836283048103, 584.411637169519, 255.58836283048103, 344.411637169519 }
+local tweeter_bolt_angles = { 78.08140527, 101.91859473, 198.08140527, 221.91859473, 318.08140527, 341.91859473 }
 
 add_driver_cuts(
 	cuts,
@@ -407,9 +412,9 @@ add_driver_cuts(
 )
 
 -- The tweeter uses the same baffle builder as the other drivers. It is placed at
--- an absolute center_x (it does not snap to a side wall) and has no bolt holes yet.
--- Its through-cutout (85 mm) is smaller than its 104.25 mm mounting bracket, matching
--- the frame-vs-cutout relationship of the woofer and midrange.
+-- an absolute center_x (it does not snap to a side wall). Its through-cutout (85 mm)
+-- is smaller than its 104.25 mm mounting bracket, matching the frame-vs-cutout
+-- relationship of the woofer and midrange.
 add_driver_cuts(
 	cuts,
 	baffles,
@@ -420,9 +425,9 @@ add_driver_cuts(
 	tweeter_bracket_diameter,
 	tweeter_cutout_diameter,
 	tweeter_rear_chamfer,
-	0,
-	0,
-	{}
+	tweeter_bolt_radius,
+	tweeter_mount_hole_diameter,
+	tweeter_bolt_angles
 )
 
 table.insert(cuts, wire_pass_through(woofer_center_y))
