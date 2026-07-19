@@ -1,4 +1,4 @@
-# Claude Code Project Instructions
+# Codex Project Instructions
 
 ## Project Context
 
@@ -8,25 +8,25 @@ All project documentation lives in the `./docs` folder, accessed directly via fi
 
 ## Tool Roles and Default Responsibilities
 
-Claude Code is the project's **primary implementation and operations tool**. By default, Claude Code should carry out concrete work requested by the user, including:
-
-- writing and modifying code or CAD automation
-- running shell commands, tests, builds, and repository workflows
-- editing project files within the configured permissions
-- interfacing with applications such as SolidWorks and Fusion 360 when the required integration is available
-- implementing plans or recommendations developed with ChatGPT Codex
-
-ChatGPT Codex is the project's **design and engineering advisor**. The user will normally use Codex for:
+ChatGPT Codex is the project's **design and engineering advisor**. Unless the user explicitly asks Codex to implement or operate something, Codex should focus on:
 
 - design guidance and engineering tradeoffs
 - best practices, reviews, and risk identification
 - interpreting requirements, measurements, and project history
-- deciding what to do next
-- producing implementation guidance for Claude Code
+- recommending a small, concrete next action
+- preparing clear implementation guidance that can be handed to Claude Code
 
-When implementing guidance from Codex, Claude Code must still verify it against `PROJECT.md`, `REQUIREMENTS.md`, the latest `WORK_HISTORY.md`, the current repository state, and actual measurements. Treat recommendations as guidance rather than permission to silently change accepted requirements. Surface conflicts, missing inputs, and safety-critical assumptions before proceeding.
+Claude Code is the project's **primary implementation and operations tool**. The user will normally use Claude Code for:
 
-After implementation, report the artifacts changed, commands or tests run, results, unresolved issues, and the next recommended action so the outcome can be reviewed by the user or Codex and recorded in project documentation.
+- writing and modifying code or CAD automation
+- running shell commands, tests, builds, and repository workflows
+- manipulating project files beyond documentation guidance
+- interfacing with applications such as SolidWorks and Fusion 360
+- carrying out implementation plans developed with Codex
+
+Codex should not assume that a request for advice authorizes code changes, shell-driven implementation, or application control. It may use read-only inspection to ground its advice and may update the required project documentation when the session produces a meaningful decision. If the user explicitly asks Codex to implement, test, run commands, or control an available application, Codex may do so within the normal permission and safety rules.
+
+When handing work to Claude Code, Codex should make the recommendation executable: identify the goal, relevant constraints, suggested sequence, acceptance checks, and any decisions that must remain provisional pending measurement.
 
 ## Session Startup: Read Documentation First
 
@@ -64,7 +64,7 @@ The `./docs` folder contains three core files:
 - Current blockers and immediate next goals
 - **Read the most recent entries before proposing the next action**
 
-### `docs/.human/` — Personal Notes (Read-Only for Claude)
+### `docs/.human/` — Personal Notes (Read-Only for Codex)
 
 The `docs/.human/` folder contains personal notes, ideas, and informal thoughts. You should:
 - **Read** these files periodically (not constantly, but regularly enough to stay aware of emerging ideas or personal context)
@@ -214,10 +214,10 @@ When recommending changes:
 - All project context belongs in the three core files
 - If a topic becomes complex enough to need its own file (e.g., detailed crossover calculations, BOM, DSP tuning), discuss this with the user first
 
-## Claude Code Configuration
+## Codex Configuration
 
 ### File Permissions
-Configured in `.Claude/settings.json` (git-synced) with machine-local overrides in `.Claude/settings.local.json` (gitignored).
+Configured in `.Codex/settings.json` (git-synced) with machine-local overrides in `.Codex/settings.local.json` (gitignored).
 
 **Allowed bash commands (always safe):**
 - Query: `ls`, `find`, `grep`, `cat`, `head`, `tail`, `wc`, `file`, `stat`, `pwd`, `tree`, `du`, `echo`, `jq`
@@ -275,7 +275,7 @@ As of the latest WORK_HISTORY.md entries:
 
 **Other project folders:** More restrictive permissions by default. Request or escalate if access is needed for specific tasks.
 
-**Configuration:** See `.Claude/settings.json` (committed to git) and `.Claude/settings.local.json` (local overrides) for the current permission configuration.
+**Configuration:** See `.Codex/settings.json` (committed to git) and `.Codex/settings.local.json` (local overrides) for the current permission configuration.
 
 ## AI Assistant Expectations
 

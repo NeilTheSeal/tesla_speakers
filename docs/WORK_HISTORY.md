@@ -979,6 +979,23 @@ Copy this template for future work:
   - Design and implement removable, gasketed side-access panel in CAD
   - Perform detailed chamber volume analysis (especially midrange)
 
+## WH-034 — Define Codex and Claude Code responsibilities
+
+- **Date:** 2026-07-18
+- **Status:** Completed
+- **Goal:** Document the user's preferred division of labor between ChatGPT Codex and Claude Code.
+- **Work performed:**
+  - Updated `AGENTS.md` to make Codex the default design and engineering advisor.
+  - Updated `.Claude/CLAUDE.md` to make Claude Code the default implementation and operations tool.
+  - Defined an explicit handoff pattern: Codex supplies goals, constraints, sequence, and acceptance checks; Claude Code implements and reports artifacts, commands, tests, and unresolved issues.
+- **Decision:**
+  - Codex should normally provide design guidance, best practices, review, and next-step advice.
+  - Claude Code should normally write code, run shell commands and tests, modify implementation files, and interface with SolidWorks or Fusion 360.
+  - Either tool may work outside its default role when the user explicitly requests it.
+- **Tests and measurements:** Documentation-only change; no engineering tests or measurements were required.
+- **Current state:** The tool responsibilities are now explicit in both project instruction files. No enclosure design, requirements, or immediate engineering milestone changed.
+- **Next action:** Continue with the existing immediate goal: design and validate one removable, gasketed side-access panel.
+
 ---
 
 # 17. Immediate Next Action
