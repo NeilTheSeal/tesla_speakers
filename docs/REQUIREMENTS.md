@@ -272,7 +272,7 @@ The following values describe the current prototype body and are design baseline
   - bounding X: 246.3 mm (includes wall thickness and trim)
   - bounding Y: 415 mm (length)
   - bounding Z: 253.05 mm (height varies with baffle and foot height)
-  - *Note: Calculated from STL export; requires slicer verification for actual print dimensions*
+  - _Note: Calculated from STL export; requires slicer verification for actual print dimensions_
 - **Note:** Raised baffles, trim rings, feet, driver protrusion, grilles, fasteners, and wiring may increase the total installed envelope beyond the nominal body dimensions.
 
 ### MEC-BASE-002 — Current printer envelope and fit
@@ -362,7 +362,7 @@ The following values describe the current prototype body and are design baseline
 - **Preliminary gross values (from CodeCAD 2-driver baseline):**
   - Woofer chamber gross: ~12.04 liters
   - Midrange chamber gross: ~5.70 liters
-  - *Note: These are derived STL volume calculations and do not yet subtract driver displacement, internal bracing, divider thickness, or crossover component volume.*
+  - _Note: These are derived STL volume calculations and do not yet subtract driver displacement, internal bracing, divider thickness, or crossover component volume._
 - **Analysis pending:**
   - Detailed subtraction of driver, brace, and crossover displacement
   - Midrange chamber sufficiency: The Scan-Speak 12MU/4731T00 manufacturer example sealed volume is ~0.9 L; the current ~5.70 L is substantially larger and requires acoustic analysis to confirm it does not introduce undesirable low-frequency resonance or impedance behavior
