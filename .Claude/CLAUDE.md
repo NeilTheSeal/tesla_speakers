@@ -67,6 +67,7 @@ The `./docs` folder contains three core files:
 ### `docs/.human/` — Personal Notes (Read-Only for Claude)
 
 The `docs/.human/` folder contains personal notes, ideas, and informal thoughts. You should:
+
 - **Read** these files periodically (not constantly, but regularly enough to stay aware of emerging ideas or personal context)
 - **Never write, edit, or modify** files in this directory
 - Treat content here as informal context that may inform recommendations or discussions, but don't treat it as formal requirements or decisions
@@ -74,18 +75,22 @@ The `docs/.human/` folder contains personal notes, ideas, and informal thoughts.
 ## File Access
 
 ### Documentation Hub (Read/Write)
+
 - `./docs/PROJECT.md` — Full read/write access (high-level design, architecture, philosophy)
 - `./docs/REQUIREMENTS.md` — Full read/write access (detailed specs, requirements, status)
 - `./docs/WORK_HISTORY.md` — Full read/write access (chronological log, decisions, measurements)
 
 ### Personal Notes (Read-Only)
+
 - `./docs/.human/*` — Read-only access (personal notes, never modify or write)
 
 ### Protected Files (Blocked)
+
 - `.env` — Environment variables (blocked)
 - `.certs/*` — Certificates (blocked)
 
 ### Project Files (Read-Only)
+
 - All other project files are read-only except where explicitly documented above
 
 ## Maintenance: README.md Synchronization
@@ -93,6 +98,7 @@ The `docs/.human/` folder contains personal notes, ideas, and informal thoughts.
 The README.md file must stay synchronized with changes to design, architecture, structure, and core goals.
 
 **When to update README:**
+
 - After changing driver selections or specifications
 - After modifying enclosure dimensions, structure, or materials
 - After updating design philosophy or system architecture
@@ -100,6 +106,7 @@ The README.md file must stay synchronized with changes to design, architecture, 
 - After updating project goals or immediate milestones
 
 **What to keep current in README:**
+
 - System concept and architecture diagram (2-3 sentences)
 - Driver table with current selections and status
 - Current Design section describing active implementation
@@ -111,6 +118,7 @@ The README.md file must stay synchronized with changes to design, architecture, 
 - Project status
 
 **Workflow:**
+
 1. Make design or requirement changes in docs/
 2. Update WORK_HISTORY.md with the change and date
 3. Update README.md to reflect the new state
@@ -217,13 +225,16 @@ When recommending changes:
 ## Claude Code Configuration
 
 ### File Permissions
-Configured in `.Claude/settings.json` (git-synced) with machine-local overrides in `.Claude/settings.local.json` (gitignored).
+
+Configured in `.claude/settings.json` (git-synced) with machine-local overrides in `.claude/settings.local.json` (gitignored).
 
 **Allowed bash commands (always safe):**
+
 - Query: `ls`, `find`, `grep`, `cat`, `head`, `tail`, `wc`, `file`, `stat`, `pwd`, `tree`, `du`, `echo`, `jq`
 - Git query: `git log`, `git status`, `git diff`, `git show`, `git branch`, `git tag`, `git blame`, `git remote`
 
 **Ask before running (potentially dangerous):**
+
 - File ops: `rm`, `rmdir`, `mv`, `cp`
 - Git ops: `git reset`, `git clean`, `git push --force`, `git checkout`, `git restore`, `git rebase`, `git branch -D`, `git tag -d`, `git commit --amend`
 - Package ops: `npm uninstall`, `npm remove`, `npm prune`, `pip uninstall`
@@ -275,7 +286,7 @@ As of the latest WORK_HISTORY.md entries:
 
 **Other project folders:** More restrictive permissions by default. Request or escalate if access is needed for specific tasks.
 
-**Configuration:** See `.Claude/settings.json` (committed to git) and `.Claude/settings.local.json` (local overrides) for the current permission configuration.
+**Configuration:** See `.claude/settings.json` (committed to git) and `.claude/settings.local.json` (local overrides) for the current permission configuration.
 
 ## AI Assistant Expectations
 

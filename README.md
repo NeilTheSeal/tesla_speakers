@@ -66,7 +66,7 @@ Assembly render with both drivers and PG7 cable glands installed:
 - `parts/` — Parametric CodeCAD model (part.lua)
 - `scripts/` — Utility scripts
 - `generated/` — Build outputs (STL and STEP files)
-- `.Claude/` — Claude Code configuration and project instructions (CLAUDE.md)
+- `.claude/` — Claude Code configuration and project instructions (CLAUDE.md)
 - `.obsidian/` — Obsidian vault configuration and settings
 - `.luarc.json` — Lua language server configuration for IDE support
 - `project.json` — CodeCAD project definition

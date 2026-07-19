@@ -987,7 +987,7 @@ Copy this template for future work:
 - **Goal:** Document the user's preferred division of labor between ChatGPT Codex and Claude Code.
 - **Work performed:**
   - Updated `AGENTS.md` to make Codex the default design and engineering advisor.
-  - Updated `.Claude/CLAUDE.md` to make Claude Code the default implementation and operations tool.
+  - Updated `.claude/CLAUDE.md` to make Claude Code the default implementation and operations tool.
   - Defined an explicit handoff pattern: Codex supplies goals, constraints, sequence, and acceptance checks; Claude Code implements and reports artifacts, commands, tests, and unresolved issues.
 - **Decision:**
   - Codex should normally provide design guidance, best practices, review, and next-step advice.
