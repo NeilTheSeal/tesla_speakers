@@ -12,11 +12,7 @@ For comprehensive project documentation, see the `docs/` folder: [PROJECT.md](do
 
 Generated cabinet model:
 
-![Cabinet render](assets/images/cabinet_render.png)
-
-Assembly render with both drivers and PG7 cable glands installed:
-
-![Speaker Assembly](assets/images/perspective_render_with_speakers_2.png)
+![Cabinet render](assets/images/cabinet_render_with_tweeter.png)
 
 ## Drivers
 
