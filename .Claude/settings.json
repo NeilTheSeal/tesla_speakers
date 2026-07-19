@@ -76,7 +76,9 @@
     "deny": [
       "Read(.env)",
       "Read(.certs)",
-      "Read(.certs/*)"
+      "Read(.certs/*)",
+      "Write(docs/.human/*)",
+      "Edit(docs/.human/*)"
     ]
   },
   "additionalDirectories": [

@@ -1,8 +1,12 @@
-# Tesla Speakers
+# Tesla Model 3 Rear-Cabin Speaker
 
-Parametric, 3D-printable sealed speaker enclosure for a rear-cabin car-floor
-prototype. The cabinet is modeled in [CodeCAD](https://codecad.xyz/) with Lua
-and is designed for active DSP/crossover use.
+A parametric, 3D-printable sealed speaker enclosure for the rear cabin floor behind the center console of a Tesla Model 3. The cabinet is modeled in [CodeCAD](https://codecad.xyz/) with Lua and designed for active DSP (woofer channel) and passive crossover (midrange/tweeter channel) use with the vehicle's 65W/4Ω amplifier outputs.
+
+**Current System:** 3-driver mono loudspeaker (woofer + midrange + tweeter) with sealed chambers and removable, gasketed service panels for future modifications.
+
+**Current Phase:** Prototype enclosure development with focus on removable side-access panel design.
+
+For comprehensive project documentation, see `docs/` folder ([PROJECT.md](docs/PROJECT.md), [REQUIREMENTS.md](docs/REQUIREMENTS.md), [WORK_HISTORY.md](docs/WORK_HISTORY.md)).
 
 ## Renders
 
@@ -16,33 +20,41 @@ Assembly render with both drivers and PG7 cable glands installed:
 
 ## Drivers
 
-| Position         | Driver                              | Mounting cutout | Frame diameter |
-| ---------------- | ----------------------------------- | --------------: | -------------: |
-| Woofer chamber   | Scan-Speak Revelator 22W/4851T00    |        194.1 mm |         222 mm |
-| Midrange chamber | Scan-Speak Illuminator 12MU/4731T00 |          101 mm |         120 mm |
+| Position         | Driver                              | Impedance | Status |
+| ---------------- | ----------------------------------- | --------- | ------ |
+| Woofer           | Scan-Speak Revelator 22W/4851T00    | 4 Ω       | Purchased |
+| Midrange         | Scan-Speak Illuminator 12MU/4731T00 | 4 Ω       | Purchased |
+| Tweeter          | Scan-Speak Illuminator D3004/662000 | 4 Ω       | Working selection (verification pending) |
 
-The driver dimensions and bolt patterns are encoded in
-[parts/part.lua](parts/part.lua). Confirm the physical drivers against the
-values in the script before committing a full-size print.
+**Driver mounting:** Cutout sizes and frame dimensions are encoded in [parts/part.lua](parts/part.lua) and must be verified against physical drivers before a full-size print.
 
 ## Current Design
 
-- Sealed, two-chamber cabinet with a full-height divider that isolates the
-  midrange from woofer back-wave pressure.
-- External dimensions: 241.3 mm wide, 410 mm long, and 220 mm cabinet height.
-- 8 mm enclosure walls with a 3 mm exterior edge chamfer.
-- 12 mm raised top baffles with 2 mm cosmetic trim rings.
-- Rear-side 45-degree driver-cutout flares, kept conservative to preserve the
-  nearby mounting-hole material.
-- Internal woofer window brace with a rounded pill opening to stiffen the long
-  cabinet walls while maintaining air movement within the woofer chamber.
-- Two 12.5 mm side-wall wire pass-throughs, one for each sealed chamber and
-  sized for PG7 cable glands.
-- Four Sorbothane-ready isolation feet: 38.1 mm diameter, 19.05 mm tall, with
-  26.9875 mm diameter by 6.35 mm deep pad pockets.
-- Flared foot collars and underside X cross-bracing for a stiffer bottom panel.
-- Low-relief exterior rails, rounded corner bumpers, and a recessed `NH` badge
-  panel for a more finished appearance.
+**System Architecture:**
+- **Amplifier channel 1** → DSP low-pass + tuning → Woofer (dedicated sealed chamber)
+- **Amplifier channel 2** → DSP high-pass + tuning → Passive midrange/tweeter crossover
+  - Midrange and tweeter share the second amplifier output through a passive network
+  - Crossover frequency: ~2.5 kHz (provisional, subject to measurement)
+
+**Enclosure:**
+- Sealed, two-chamber cabinet (separate woofer and midrange volumes) with isolated tweeter rear chamber
+- Primarily one-piece large-format 3D-printed structural shell
+- Removable, gasketed side-access panels for service access and future modifications
+- Internal divider isolates midrange from woofer back-wave pressure
+- Nominal dimensions: 241.3 mm (width) × 410 mm (length) × 220 mm (height)
+- Generated STL envelope: 246.3 mm × 415 mm × 253.05 mm (preliminary)
+- Preliminary chamber volumes: woofer ~12.04 L, midrange ~5.70 L (awaiting detailed analysis)
+
+**Structural Features:**
+- 8 mm enclosure walls with internal bracing and reinforcement ribs
+- 12 mm raised driver baffles with trim rings
+- Internal woofer chamber window brace with rounded opening
+- Two 12.5 mm side-wall wire pass-throughs (sized for PG7 cable glands)
+- Four Sorbothane-ready isolation feet (38.1 mm diameter, 19.05 mm tall)
+- Flared foot collars and underside X cross-bracing for stiffness
+- Low-relief exterior detail elements
+
+**Current Milestone:** Design and validate a removable, gasketed side-access panel revision to enable tweeter and crossover integration without full enclosure re-printing.
 
 ## Files
 

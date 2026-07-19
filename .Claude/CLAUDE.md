@@ -2,19 +2,19 @@
 
 ## Project Context
 
-This is the **Tesla Model 3 Rear-Cabin Speaker Project** — a carefully engineered custom loudspeaker system for the rear cabin. All project documentation lives in the `./docs` folder (Obsidian vault ID `90b333e29c3676b1`), accessed directly via file read/write. This markdown file is a reference point for any agent, whether it is Claude Code, ChatGPT Codex, or another tool.
+This is the **Tesla Model 3 Rear-Cabin Speaker Project** — a carefully engineered custom loudspeaker system for the rear cabin. A parametric, 3D-printable three-driver sealed enclosure designed for active DSP (woofer) and passive crossover (midrange/tweeter) use with a Tesla Model 3 rear-cabin 65W/4Ω amplifier.
 
-## Required: Read Project Docs at Session Start
+All project documentation lives in the `./docs` folder, accessed directly via file read/write. The README.md is kept synchronized with this documentation.
 
-**EVERY chat session MUST start by reading all files in the `./docs` folder.** Do this immediately, before responding to the first user prompt. Use direct file access:
+## Session Startup: Read Documentation First
 
-```bash
-./docs/PROJECT.md
-./docs/REQUIREMENTS.md
-./docs/WORK_HISTORY.md
-```
+**EVERY chat session MUST start by reading all files in this order:**
 
-This establishes the current state, active constraints, and immediate next steps. **Do not skip this step.**
+1. `./docs/WORK_HISTORY.md` — Current project state, immediate goals, recent blockers
+2. `./docs/PROJECT.md` — System vision, architecture, design philosophy
+3. `./docs/REQUIREMENTS.md` — Detailed specifications and constraints
+
+Do this immediately, before responding to the first user prompt. This establishes the current state, active constraints, and immediate next steps.
 
 ## Documentation Structure
 
@@ -31,7 +31,7 @@ The `./docs` folder contains three core files:
 
 - Detailed mechanical, electrical, acoustic, and usability constraints
 - Testable requirements and success criteria
-- Safety, installation, and manufacturability constraints
+- Component selections with specifications
 - **Consult this before recommending changes** to ensure proposals don't violate established constraints
 
 ### `WORK_HISTORY.md`
@@ -42,7 +42,57 @@ The `./docs` folder contains three core files:
 - Current blockers and immediate next goals
 - **Read the most recent entries before proposing the next action**
 
-These are your main reference points. However, other files should be created as needed, such as IDEAS.md (if the user mentions something that does not yet exist in context), APPLICATIONS.md (for describing the applications, libraries, and methods used to design), et cetera.
+### `docs/.human/` — Personal Notes (Read-Only for Claude)
+
+The `docs/.human/` folder contains personal notes, ideas, and informal thoughts. You should:
+- **Read** these files periodically (not constantly, but regularly enough to stay aware of emerging ideas or personal context)
+- **Never write, edit, or modify** files in this directory
+- Treat content here as informal context that may inform recommendations or discussions, but don't treat it as formal requirements or decisions
+
+## File Access
+
+### Documentation Hub (Read/Write)
+- `./docs/PROJECT.md` — Full read/write access (high-level design, architecture, philosophy)
+- `./docs/REQUIREMENTS.md` — Full read/write access (detailed specs, requirements, status)
+- `./docs/WORK_HISTORY.md` — Full read/write access (chronological log, decisions, measurements)
+
+### Personal Notes (Read-Only)
+- `./docs/.human/*` — Read-only access (personal notes, never modify or write)
+
+### Protected Files (Blocked)
+- `.env` — Environment variables (blocked)
+- `.certs/*` — Certificates (blocked)
+
+### Project Files (Read-Only)
+- All other project files are read-only except where explicitly documented above
+
+## Maintenance: README.md Synchronization
+
+The README.md file must stay synchronized with changes to design, architecture, structure, and core goals.
+
+**When to update README:**
+- After changing driver selections or specifications
+- After modifying enclosure dimensions, structure, or materials
+- After updating design philosophy or system architecture
+- After adding/removing features or design phases
+- After updating project goals or immediate milestones
+
+**What to keep current in README:**
+- System concept and architecture diagram (2-3 sentences)
+- Driver table with current selections and status
+- Current Design section describing active implementation
+- Current phase and immediate milestone
+- Links to detailed docs (docs/PROJECT.md, docs/REQUIREMENTS.md, docs/WORK_HISTORY.md)
+- File inventory and directory structure
+- Build instructions and parametric controls
+- Print and assembly notes
+- Project status
+
+**Workflow:**
+1. Make design or requirement changes in docs/
+2. Update WORK_HISTORY.md with the change and date
+3. Update README.md to reflect the new state
+4. Ensure README.md intro section includes link to full documentation
 
 ## How to Work with This Project
 
@@ -142,6 +192,33 @@ When recommending changes:
 - All project context belongs in the three core files
 - If a topic becomes complex enough to need its own file (e.g., detailed crossover calculations, BOM, DSP tuning), discuss this with the user first
 
+## Claude Code Configuration
+
+### File Permissions
+Configured in `.Claude/settings.json` (git-synced) with machine-local overrides in `.Claude/settings.local.json` (gitignored).
+
+**Allowed bash commands (always safe):**
+- Query: `ls`, `find`, `grep`, `cat`, `head`, `tail`, `wc`, `file`, `stat`, `pwd`, `tree`, `du`, `echo`, `jq`
+- Git query: `git log`, `git status`, `git diff`, `git show`, `git branch`, `git tag`, `git blame`, `git remote`
+
+**Ask before running (potentially dangerous):**
+- File ops: `rm`, `rmdir`, `mv`, `cp`
+- Git ops: `git reset`, `git clean`, `git push --force`, `git checkout`, `git restore`, `git rebase`, `git branch -D`, `git tag -d`, `git commit --amend`
+- Package ops: `npm uninstall`, `npm remove`, `npm prune`, `pip uninstall`
+- System ops: `dd`, `mkfs`, `chmod`, `chown`, `kill`, `sudo`, `eval`, `exec`, `source`
+
+All potentially dangerous commands use "ask" mode, never strict denial.
+
+## Best Practices
+
+1. **Read docs at session start** — They are the single source of truth
+2. **Update docs after work** — Changes to code, design, or status must be reflected in docs
+3. **Keep README synchronized** — It's the public face of the project; accuracy matters
+4. **Use direct file access** — Read/Edit/Write tools for docs/ are faster than any API
+5. **Preserve audit trail** — WORK_HISTORY.md maintains a complete record of decisions
+6. **Ask before dangerous ops** — Permission system requires explicit approval for risky commands
+7. **Personal notes stay personal** — Never write to docs/.human/; only read when context is needed
+
 ## Context and Decision-Making
 
 ### Measured Results Are Authoritative
@@ -176,14 +253,14 @@ As of the latest WORK_HISTORY.md entries:
 
 **Other project folders:** More restrictive permissions by default. Request or escalate if access is needed for specific tasks.
 
-**Configuration:** See `.Claude/settings.local.json` for the current permission allowlist.
+**Configuration:** See `.Claude/settings.json` (committed to git) and `.Claude/settings.local.json` (local overrides) for the current permission configuration.
 
 ## AI Assistant Expectations
 
 When working on this project, you should:
 
 1. **Always start by reading `./docs`** — This is not optional
-2. **Use the Obsidian REST API** to read and write — The vault is the source of truth
+2. **Use direct file read/write access** for docs — The three files are the source of truth
 3. **Update WORK_HISTORY.md after every session** — This is how we maintain continuity
 4. **Refer to constraints before recommending changes** — Check REQUIREMENTS.md
 5. **Explain conflicts with existing decisions** — Don't silently override prior choices
