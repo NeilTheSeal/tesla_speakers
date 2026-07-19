@@ -94,9 +94,17 @@ Requirements are expected to evolve as vehicle measurements, driver data, enclos
 ### SYS-005 — Tweeter selection
 
 - **Priority:** MUST
-- **Status:** TBD
-- **Requirement:** A tweeter shall be selected that is compatible with the available baffle space, intended crossover region, amplifier power, required sensitivity, and desired full-range high-frequency reproduction.
-- **Verification:** Analysis, document review, and measurement
+- **Status:** Provisional (current working selection)
+- **Current selection:** Scan-Speak Illuminator D3004/662000, 4 ohm
+- **Provisional data:**
+  - Rated impedance: 4 ohm nominal
+  - Manufacturer sensitivity: ~85 dB @ 1 m, 1 W (per Scan-Speak datasheet)
+  - Manufacturer crossover recommendation: ~2.5 kHz with appropriate passive network
+  - Baffle mount: 76.2 mm diameter frame hole, 50 mm sound aperture
+  - Rear chamber requirement: Nominally sealed; manufacturer provides free-air specifications
+- **Requirement:** The Scan-Speak D3004/662000 shall be used unless physical measurement, fit verification, or acoustic testing demonstrates an incompatibility or superior alternative.
+- **Verification:** Physical measurement against CAD model, fit test before full enclosure print, acoustic measurement in final enclosure, crossover development
+- **Note:** Physical tweeter unit verification is pending.
 
 ### SYS-006 — First-release architecture
 
@@ -255,19 +263,28 @@ The following values describe the current prototype body and are design baseline
 ### MEC-BASE-001 — Current cabinet body
 
 - **Status:** Provisional
-- **Current value:**
+- **Nominal body dimensions (CAD model interior reference):**
   - body width: 9.5 in / 241.3 mm
   - body length: 410 mm
   - body height: 220 mm
   - nominal wall thickness: 8 mm
-- **Note:** Raised baffles, trim rings, feet, driver protrusion, grilles, fasteners, and wiring may increase the total installed envelope.
+- **Generated STL envelope (preliminary, from CodeCAD Lua output):**
+  - bounding X: 246.3 mm (includes wall thickness and trim)
+  - bounding Y: 415 mm (length)
+  - bounding Z: 253.05 mm (height varies with baffle and foot height)
+  - *Note: Calculated from STL export; requires slicer verification for actual print dimensions*
+- **Note:** Raised baffles, trim rings, feet, driver protrusion, grilles, fasteners, and wiring may increase the total installed envelope beyond the nominal body dimensions.
 
-### MEC-BASE-002 — Current printer envelope
+### MEC-BASE-002 — Current printer envelope and fit
 
-- **Status:** Accepted
-- **Current value:** 420 × 420 × 480 mm
-- **Requirement:** A one-piece print shall fit within this build volume with adequate slicer clearance.
-- **Verification:** Slicer review
+- **Status:** Under Review
+- **Printer build volume:** 420 × 420 × 480 mm
+- **Current generated length (Y-axis):** 415 mm
+- **Margin analysis:** 5 mm remaining (415 mm model + slicer clearance margin must fit within 420 mm)
+- **Requirement:** The enclosure shall fit within the printer build volume with adequate slicer clearance. Actual fit must be verified with the specific slicer profile before printing.
+- **Flag:** The 5 mm margin between the current 415 mm generated length and the 420 mm printer dimension is marginal. Slicer settings, nozzle offset, and bed-level variation must be verified before committing to the full print.
+- **Verification:** Slicer review with actual equipment, test print verification before full-enclosure commitment
+- **Alternative approach:** Removable side-access panels (see MEC-V1-PANEL) provide design flexibility if full one-piece print proves infeasible or undesirable.
 
 ### MEC-BASE-003 — Current chamber division
 
@@ -307,6 +324,20 @@ The following values describe the current prototype body and are design baseline
 - **Requirement:** These values shall be independently verified against the physical drivers and manufacturer drawings before the full enclosure is printed.
 - **Verification:** Physical measurement and document review
 
+### MEC-V1-PANEL — Removable service access panel
+
+- **Priority:** MUST (for V1 prototype)
+- **Status:** In Design
+- **Requirement:** The first complete prototype shall incorporate at least one removable, gasketed access panel to allow future internal modification, tweeter integration, crossover development, and internal inspection without requiring full enclosure re-printing.
+- **Panel specifications:**
+  - Location: Side-mounted access panel (currently favored approach)
+  - Acoustic sealing: Continuous gasket groove (rabbet joint preferred) for consistent seal without over-tightening
+  - Fastening: Reusable fasteners (screws with threaded inserts or captive nuts) for multiple open/close cycles
+  - Locating features: Lip or rabbet joint to ensure repeatable alignment and seal compression
+  - Minimum opening: Sufficient to access crossover components and provide acoustic measurement ports
+  - Validation: Acoustic leak test after gasket installation and fastening
+- **Verification:** CAD review, gasket material selection, insert/nut geometry validation, acoustic leak test
+
 ---
 
 ## 6. Mechanical Enclosure Requirements
@@ -325,12 +356,27 @@ The following values describe the current prototype body and are design baseline
 - **Requirement:** The woofer and midrange shall occupy separate sealed air volumes so woofer back pressure cannot directly modulate the midrange cone.
 - **Verification:** CAD review and inspection
 
+### MEC-BASE-007 — Preliminary gross chamber volumes (derived from current CAD)
+
+- **Status:** Provisional Analysis
+- **Preliminary gross values (from CodeCAD 2-driver baseline):**
+  - Woofer chamber gross: ~12.04 liters
+  - Midrange chamber gross: ~5.70 liters
+  - *Note: These are derived STL volume calculations and do not yet subtract driver displacement, internal bracing, divider thickness, or crossover component volume.*
+- **Analysis pending:**
+  - Detailed subtraction of driver, brace, and crossover displacement
+  - Midrange chamber sufficiency: The Scan-Speak 12MU/4731T00 manufacturer example sealed volume is ~0.9 L; the current ~5.70 L is substantially larger and requires acoustic analysis to confirm it does not introduce undesirable low-frequency resonance or impedance behavior
+  - Woofer alignment: Preliminary modeling with Thiele-Small parameters from the 22W/4851T00 datasheet
+- **Requirement:** Net chamber volumes shall be calculated and verified against driver requirements and acoustic targets before the divider position is frozen.
+- **Verification:** CAD volume calculation, acoustic impedance modeling, measurement validation in final enclosure
+
 ### MEC-003 — Tweeter rear volume
 
 - **Priority:** MUST
-- **Status:** TBD
+- **Status:** TBD (pending tweeter physical verification)
 - **Requirement:** The tweeter installation shall comply with the selected tweeter's rear-chamber requirements. A self-contained tweeter shall not be exposed to cabinet pressure through an unintended leak.
-- **Verification:** Manufacturer document review and inspection
+- **Tweeter rear-chamber note:** The Scan-Speak D3004/662000 is typically specified for sealed (infinite baffle) or free-air operation; rear-chamber pressure effects shall be evaluated during crossover development and acoustic measurement.
+- **Verification:** Manufacturer document review, physical measurement in actual baffle, acoustic testing
 
 ### MEC-004 — Net chamber volume calculation
 
@@ -612,6 +658,22 @@ The following values describe the current prototype body and are design baseline
 - **Status:** Accepted
 - **Requirement:** Exposed terminals and internal wiring shall be arranged so normal handling cannot short either amplifier output.
 - **Verification:** Inspection
+
+### ELEC-009b — External binding-post assembly (provisional)
+
+- **Priority:** SHOULD
+- **Status:** Provisional selection (reference component obtained)
+- **Current selection:** Keystone Electronics 4109 dual binding-post assembly
+- **Provisional data:**
+  - Two isolated dual binding-post pairs (4 posts total)
+  - Screw terminal type, suitable for 16 AWG or larger wire
+  - Panel-mount M4 thread and standoff M3 anchor bolts
+  - Rated for speaker-level amplifier output (typical 65 W / 4 ohm = ~5 A sustained)
+- **Requirement:** An external amplifier interface shall use a dual binding-post assembly suitable for speaker-level connections. The Keystone 4109 is a provisional selection pending:
+  - Final CAD panel location design
+  - Verification that the current chassis can accommodate one or two dual assemblies as needed
+  - Testing to confirm adequate current capacity and reliable connection under automotive vibration
+- **Verification:** CAD fit review, connection reliability testing under vibration, thermal testing under expected current
 
 ### ELEC-010 — Wiring current capacity
 

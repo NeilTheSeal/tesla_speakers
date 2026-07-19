@@ -36,9 +36,9 @@ The current design is a three-driver mono loudspeaker:
 
 The currently selected main drivers are:
 
-- **Woofer:** Scan-Speak Revelator 22W/4851T00, 4 ohm
-- **Midrange:** Scan-Speak Illuminator 12MU/4731T00, 4 ohm
-- **Tweeter:** To be finalized
+- **Woofer:** Scan-Speak Revelator 22W/4851T00, 4 ohm (purchased)
+- **Midrange:** Scan-Speak Illuminator 12MU/4731T00, 4 ohm (purchased)
+- **Tweeter:** Current working selection: Scan-Speak Illuminator D3004/662000, 4 ohm (physical verification pending)
 
 The vehicle amplifier provides two independent powered outputs. Each output can be assigned an arbitrary input mix and can be independently configured with filters, EQ, time alignment, level, panning, and dynamics processing.
 
@@ -66,12 +66,14 @@ This hybrid architecture keeps the low-frequency crossover in DSP, where it is e
 
 The enclosure is designed to sit on the rear floor behind the center console.
 
+**Important note on current baseline:** The CodeCAD model currently represents a two-driver mechanical baseline (woofer + midrange). The intended V1 system adds a third driver (tweeter) with a passive midrange/tweeter crossover. Documentation and CAD updates to fully integrate the tweeter are in progress.
+
 The current prototype concept is:
 
-- One-piece, large-format 3D-printed cabinet
-- Approximately 9.5 inches wide
-- Approximately 410 mm long
-- Approximately 220 mm tall
+- Primarily one-piece large-format 3D-printed structural shell
+- Removable, gasketed side-access panels for service and future expansion
+- **Nominal body dimensions:** 241.3 mm (width) × 410 mm (length) × 220 mm (height)
+- **Generated STL envelope (preliminary):** 246.3 mm × 415 mm × 253.05 mm (height variation due to baffle and feet)
 - Sealed woofer chamber
 - Separate sealed midrange chamber
 - Internal divider between woofer and midrange volumes
@@ -84,6 +86,8 @@ The current prototype concept is:
 The enclosure is currently being generated primarily with CodeCAD in Lua. More detailed geometry, fit refinement, mounting features, and cosmetic work may be completed in SolidWorks.
 
 The design should remain easy to revise. Prototype print time and material use are acceptable costs if a new enclosure revision materially improves fit, strength, serviceability, or acoustic performance.
+
+**Current immediate milestone:** Develop and validate a removable, gasketed side-access panel revision to enable future tweeter and crossover modifications without full enclosure reprinting.
 
 ---
 
@@ -263,19 +267,21 @@ Completed or substantially developed work includes:
 - Selection and purchase of the woofer and midrange
 - Selection of the rear-floor location behind the center console
 - Selection of the broad two-channel hybrid active/passive architecture
-- Parametric CAD development of the first enclosure prototype
+- Selection of a current working tweeter (D3004/662000, pending physical verification)
+- Parametric CAD development of the first enclosure prototype (currently a two-driver mechanical baseline)
 - Definition of separate sealed woofer and midrange chambers
 - Addition of basic bracing, feet, isolation-pad recesses, driver openings, and wire pass-throughs
 - Establishment of Git and AI-assisted development workflows
 - Initial investigation of crossover strategies and measurement workflow
+- Preliminary chamber volume calculations (woofer: ~12.04 L, midrange: ~5.70 L)
 
 Items still in development include:
 
-- Final tweeter selection
-- Final tweeter location and baffle integration
+- Removable, gasketed side-access panel design and validation
+- Final tweeter physical verification and baffle integration
 - Verification of exact driver mounting dimensions
-- Final chamber-volume analysis
-- Final enclosure fit verification
+- Detailed chamber-volume analysis (midrange chamber in particular)
+- Final enclosure fit verification in vehicle
 - Electrical terminal and internal wiring design
 - Prototype fabrication
 - Driver-by-driver acoustic measurement
@@ -283,7 +289,7 @@ Items still in development include:
 - Final DSP tuning
 - Installation and road testing
 
-The current CAD model should be treated as a first prototype rather than a frozen design.
+The current CAD model should be treated as a first prototype rather than a frozen design. Enclosure geometry remains parametric and revision-ready.
 
 ---
 
