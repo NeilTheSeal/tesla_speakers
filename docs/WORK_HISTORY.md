@@ -1032,6 +1032,35 @@ Copy this template for future work:
 - **Immediate next action:** Complete the equipment inventory and one documented printer calibration print. Stop before printing enclosure-scale geometry.
 - **Open questions:** Exact delivered models/materials, whether the tweeter is physically present, which measurement and impedance tools are available, and which filament is intended for the road-use enclosure.
 
+## WH-041 - Driver datasheets transcribed into hardware reference
+
+- **Date:** 2026-07-18
+- **Status:** Completed
+- **Goal:** Make the three selected-driver datasheets readable and searchable from the Markdown project documentation.
+- **Work performed:**
+  - Added `docs/HARDWARE_SPECS.md` with manufacturer T-S parameters, mechanical data, electrical data, power handling, features, enclosure examples, source links, and cautious qualitative readings of the supplied response/impedance curves.
+  - Linked the hardware reference from `README.md`.
+  - Compared the user transcription with rendered source PDFs.
+- **Discrepancies resolved:**
+  - Woofer Qes recorded as 0.23 from the rendered PDF rather than the transcribed 0.20.
+  - Woofer Cms recorded as 0.85 mm/N from the rendered PDF rather than the transcribed 1.85 mm/N.
+  - Midrange Le recorded as 0.11 mH from the rendered PDF rather than the rounded transcription of 0.1 mH.
+  - Flagged the `12MU-4851-T00_FRC.png` title/filename mismatch with the actual 12MU/4731T00 driver.
+- **Result:** Driver manufacturer data is now available as a repository-native reference while remaining explicitly subordinate to original datasheets and later physical measurements.
+- **Design impact:** No architecture or accepted requirement changed. The values continue to support enclosure-volume analysis and a measurement-derived midrange/tweeter crossover near the provisional 2.5 kHz region.
+- **Immediate next action:** Unchanged: inventory delivered equipment and complete one documented printer calibration print.
+
+## WH-042 - Correct woofer compliance transcription
+
+- **Date:** 2026-07-18
+- **Status:** Correction
+- **Problem:** `docs/HARDWARE_SPECS.md` initially recorded the 22W/4851T00 woofer compliance, Cms, as 0.85 mm/N based on a visual reading of the rendered datasheet.
+- **Verified correction:** The user rechecked the source and confirmed Cms is 1.85 mm/N.
+- **Other checked values:** Woofer Qes remains 0.23, and midrange Le remains 0.11 mH.
+- **Change made:** Updated the current hardware reference to Cms = 1.85 mm/N.
+- **Design impact:** Any future woofer enclosure model or alignment calculation shall use Cms = 1.85 mm/N unless physical parameter measurement establishes a different value.
+- **Immediate next action:** Unchanged: inventory delivered equipment and complete one documented printer calibration print.
+
 ---
 
 # 17. Immediate Next Action

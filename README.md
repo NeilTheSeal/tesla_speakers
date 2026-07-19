@@ -6,7 +6,7 @@ A parametric, 3D-printable sealed speaker enclosure for the rear cabin floor beh
 
 **Current Phase:** Fabrication readiness: inventory delivered hardware, commission the printer, and verify physical dimensions before revising or printing the enclosure.
 
-For comprehensive project documentation, see `docs/` folder ([PROJECT.md](docs/PROJECT.md), [REQUIREMENTS.md](docs/REQUIREMENTS.md), [WORK_HISTORY.md](docs/WORK_HISTORY.md)).
+For comprehensive project documentation, see the `docs/` folder: [PROJECT.md](docs/PROJECT.md), [REQUIREMENTS.md](docs/REQUIREMENTS.md), [WORK_HISTORY.md](docs/WORK_HISTORY.md), and [HARDWARE_SPECS.md](docs/HARDWARE_SPECS.md).
 
 ## Renders
 
@@ -20,23 +20,25 @@ Assembly render with both drivers and PG7 cable glands installed:
 
 ## Drivers
 
-| Position         | Driver                              | Impedance | Status |
-| ---------------- | ----------------------------------- | --------- | ------ |
-| Woofer           | Scan-Speak Revelator 22W/4851T00    | 4 Ω       | Purchased |
-| Midrange         | Scan-Speak Illuminator 12MU/4731T00 | 4 Ω       | Purchased |
-| Tweeter          | Scan-Speak Illuminator D3004/662000 | 4 Ω       | Working selection (verification pending) |
+| Position | Driver                              | Impedance | Status                                   |
+| -------- | ----------------------------------- | --------- | ---------------------------------------- |
+| Woofer   | Scan-Speak Revelator 22W/4851T00    | 4 Ω       | Purchased                                |
+| Midrange | Scan-Speak Illuminator 12MU/4731T00 | 4 Ω       | Purchased                                |
+| Tweeter  | Scan-Speak Illuminator D3004/662000 | 4 Ω       | Working selection (verification pending) |
 
 **Driver mounting:** Cutout sizes and frame dimensions are encoded in [parts/part.lua](parts/part.lua) and must be verified against physical drivers before a full-size print.
 
 ## Current Design
 
 **System Architecture:**
+
 - **Amplifier channel 1** → DSP low-pass + tuning → Woofer (dedicated sealed chamber)
 - **Amplifier channel 2** → DSP high-pass + tuning → Passive midrange/tweeter crossover
   - Midrange and tweeter share the second amplifier output through a passive network
   - Crossover frequency: ~2.5 kHz (provisional, subject to measurement)
 
 **Enclosure:**
+
 - Sealed, two-chamber cabinet (separate woofer and midrange volumes) with isolated tweeter rear chamber
 - Primarily one-piece large-format 3D-printed structural shell
 - Removable, gasketed side-access panels for service access and future modifications
@@ -46,6 +48,7 @@ Assembly render with both drivers and PG7 cable glands installed:
 - Preliminary chamber volumes: woofer ~12.04 L, midrange ~5.70 L (awaiting detailed analysis)
 
 **Structural Features:**
+
 - 8 mm enclosure walls with internal bracing and reinforcement ribs
 - 12 mm raised driver baffles with trim rings
 - Internal woofer chamber window brace with rounded opening
@@ -58,22 +61,16 @@ Assembly render with both drivers and PG7 cable glands installed:
 
 ## Files
 
-```text
-assets/images/                                   Cabinet and assembly renders
-assets/images/cabinet_render.png                 Generated cabinet render
-assets/images/perspective_render_with_speakers.png
-                                                 Early driver assembly render
-assets/images/perspective_render_with_speakers_2.png
-                                                 Assembly render with cable glands
-assets/objects/PG7_CABLE_GLAND.STEP              Cable-gland reference model
-parts/part.lua                                   Parametric CodeCAD model
-scripts/angle_calculator.js                      Mounting-hole angle helper
-generated/part.stl                               Generated print mesh after a build
-generated/part.step                              Generated solid model after a build
-12mu-4731t00/                                    Supplied midrange CAD files
-22w-4851t00/                                     Supplied woofer CAD files
-project.json                                     CodeCAD project definition
-```
+- `assets/` — Cabinet and assembly renders, reference CAD models
+- `docs/` — Project documentation (PROJECT.md, REQUIREMENTS.md, WORK_HISTORY.md, HARDWARE_SPECS.md)
+- `parts/` — Parametric CodeCAD model (part.lua)
+- `scripts/` — Utility scripts
+- `generated/` — Build outputs (STL and STEP files)
+- `.Claude/` — Claude Code configuration and project instructions (CLAUDE.md)
+- `.luarc.json` — Lua language server configuration for IDE support
+- `project.json` — CodeCAD project definition
+- `AGENTS.md` — AI agent coordination and workflow documentation
+- `imgui.ini` — CodeCAD ImGui layout and window state
 
 ## Build
 
